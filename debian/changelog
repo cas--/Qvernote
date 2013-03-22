@@ -1,0 +1,178 @@
+qvernote (0.5-5maemo1) stable; urgency=low
+
+  * Fixed GPS position update crash
+  * Fixed non-english file names handeling
+  * Pdf preview now resizing depending on orientation
+  * Increase speed of displaying a note
+
+ -- Sharky76 <burbulator@gmail.com>  Sun, 22 Aug 2010 16:53:00 +0300
+
+qvernote (0.5-4maemo1) stable; urgency=low
+
+  * Added "audio/x-wav" mime type support
+  * Fixed non-english note title in Tags select dialog
+  * Fixed note attributes does not created on sync
+
+ -- Sharky76 <burbulator@gmail.com>  Mon, 10 Aug 2010 11:53:00 +0300
+
+qvernote (0.5-3maemo1) stable; urgency=low
+
+  * Added option to blacklist notebooks from synchronizing
+  * Fixed crash bug when editing a note then opening another notebook
+  * Added note limit
+
+ -- Sharky76 <burbulator@gmail.com>  Mon, 9 Aug 2010 14:17:00 +0300
+
+qvernote (0.5-2maemo1) stable; urgency=low
+
+  * Implemented GPS positioning update
+  * Added internationalization support
+  * Added resource save/preview dialog
+  * Added preview for PDF and Audio files
+
+ -- Sharky76 <burbulator@gmail.com>  Mon, 9 Aug 2010 14:17:00 +0300
+
+qvernote (0.5-1maemo1) stable; urgency=low
+
+  * Render thumbnails like Evernote web interface
+  * Even more speed improvements
+  * Fixed save note prompt appearing every time
+  * PDF preview support!!!
+  * Notebook search
+
+ -- Sharky76 <burbulator@gmail.com>  Mon, 2 Aug 2010 15:45:00 +0300
+
+qvernote (0.5-0maemo1) stable; urgency=low
+
+  * Release 0.5
+  * Fixed "&" sign breaking note text
+  * Maps support (google maps only)
+  * Fixed multiple notes creation bug
+
+ -- Sharky76 <burbulator@gmail.com>  Sat,  31 Jul 2010 22:11:00 +0300
+
+qvernote (0.4-7maemo1) stable; urgency=low
+
+  * Fixed crash whne deleting the note and re-opening the notebook
+  * Added favorite notes support
+  * Generate note thumbnails on sync
+  * Added DB indexes to improve note loading speed
+  * imroved thumbnail visibility - now covers more of the original note area
+
+ -- Sharky76 <burbulator@gmail.com>  Wed,  25 Jul 2010 17:42:00 +0300
+
+qvernote (0.4-6maemo1) stable; urgency=low
+
+  * Fixed note sorting order
+
+ -- Sharky76 <burbulator@gmail.com>  Wed,  21 Jul 2010 22:58:00 +0300
+
+qvernote (0.4-5maemo1) stable; urgency=low
+
+  * Fixed a lot of memory leaks
+  * Reduced memory usage
+  * General speed increase
+
+ -- Sharky76 <burbulator@gmail.com>  Wed,  20 Jul 2010 22:58:00 +0300
+
+qvernote (0.4-3maemo1) stable; urgency=low
+
+  * Ability to manage note after search
+  * Fixed auto-capitalization bug in Note Editor
+  * Add error message when attempting to save note without title
+
+ -- Sharky76 <burbulator@gmail.com>  Wed,  17 Jul 2010 22:55:00 +0300
+
+qvernote (0.4-2maemo1) stable; urgency=low
+
+  * Search by tag support
+  * Sort notes by date
+  * Fixed bug with syncing several resource types
+
+ -- Sharky76 <burbulator@gmail.com>  Wed,  15 Jul 2010 23:39:00 +0300
+
+qvernote (0.4-1maemo1) unstable; urgency=low
+
+  * Support for grid note view with thumbnails
+  * Fixed new note uploading to server
+  * Support "search-as-you-type"
+  * Fixed web clip note view
+  * Added "Settings" dialog
+  * Added move and copy of notes to another notebooks
+  * Added DB management (delete thumbnails and drop DB)
+  * Added platform contact list integration
+  * Moved database to /home/user/MyDocs partition
+  * Added nice animated navigation controls to Note View window
+  * Added notes switch animation
+
+ -- Sharky76 <burbulator@gmail.com>  Tue,  29 Jun 2010 14:21:00 +0300
+
+qvernote (0.3-8maemo1) unstable; urgency=low
+
+  * Fixed extremly long delay bug when starting note edit
+  * Rediced memory usage
+  * Make edit window child of both NoteViewWindow and NotesView
+  * Removed "note" icon from notelist item widget
+
+ -- Sharky76 <burbulator@gmail.com>  Mon,  28 Jun 2010 11:50:00 +0300
+
+qvernote (0.3-7maemo1) unstable; urgency=low
+
+  * Add notebook name in notes view
+  * Display progress of downloaded notes
+  * Add contact me button to about dialog
+  * Fixed secondary text color to be in match with maemo default color
+  * Fixed crash in delete notebook view
+  * Note web view scrolls to the beginning when paging notes
+
+ -- Sharky76 <burbulator@gmail.com>  Sat,  26 Jun 2010 22:10:18 +0300
+
+qvernote (0.3-6maemo1) unstable; urgency=low
+
+  * Fix error on uninstall in prerm script
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  25 Jun 2010 23:10:18 +0300
+
+qvernote (0.3-5maemo1) unstable; urgency=low
+
+  * Fix error on uninstall in prerm script
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  25 Jun 2010 23:10:18 +0300
+
+qvernote (0.3-4maemo1) unstable; urgency=low
+
+  * Fix error on install in postinst script
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  25 Jun 2010 23:10:18 +0300
+
+qvernote (0.3-3maemo1) unstable; urgency=low
+
+  * Fix crash on big notestore
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  21 Jun 2010 23:05:18 +0300
+
+qvernote (0.3-2maemo1) unstable; urgency=low
+
+  * Fix dependencies for a binary package
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  21 Jun 2010 23:05:18 +0300
+
+qvernote (0.3-1maemo1) unstable; urgency=low
+  
+  * Implemented offline sync support
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  21 Jun 2010 23:05:18 +0300
+
+qvernote (0.2-1maemo1) unstable; urgency=low
+
+  * Add support for all kind of notes except crypt
+  * Add "view" note mode before edit
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  14 Jun 2010 08:20:18 +0300
+
+qvernote (0.1-1maemo1) unstable; urgency=low
+
+  * Initial release 
+
+ -- Sharky76 <burbulator@gmail.com>  Fri,  4 Jun 2010 21:54:18 +0300
+

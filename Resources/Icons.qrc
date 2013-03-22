@@ -1,0 +1,46 @@
+<RCC>
+    <qresource prefix="/IconAdd">
+        <file>general_stop.png</file>
+        <file>general_add.png</file>
+        <file>general_refresh.png</file>
+        <file>notes_save.png</file>
+        <file>notes_underline.png</file>
+        <file>general_italic.png</file>
+        <file>general_forward.png</file>
+        <file>general_delete.png</file>
+        <file>general_bold.png</file>
+        <file>general_back.png</file>
+        <file>tile_img.png</file>
+        <file>email_attachment.png</file>
+        <file>star-32.png</file>
+        <file>notebook_edit.png</file>
+        <file>general_email.png</file>
+        <file>Tag-32.png</file>
+        <file>widgets_tickmark_list.png</file>
+        <file>general_tag.png</file>
+        <file>evernote.png</file>
+        <file>Document_Notes_64.png</file>
+        <file>Document_Notes_48.png</file>
+        <file>Star-48.png</file>
+        <file>Evernote-64.png</file>
+        <file>file-generic.png</file>
+        <file>calendar_todo.png</file>
+        <file>general_sketch.png</file>
+        <file>notes_bullets.png</file>
+        <file>note_zoomin.png</file>
+        <file>note_zoomout.png</file>
+        <file>general_contacts.png</file>
+        <file>general_fullsize_b.png</file>
+        <file>general_fullsize64.png</file>
+        <file>general_back64.png</file>
+        <file>general_forward64.png</file>
+        <file>general_email64.png</file>
+        <file>Star-empty-48.png</file>
+        <file>Star-full-48.png</file>
+        <file>Maps-blue-64.png</file>
+        <file>file-audio.png</file>
+        <file>file-pdf.png</file>
+        <file>gps_location.png</file>
+        <file>general_presence_offline.png</file>
+    </qresource>
+</RCC>

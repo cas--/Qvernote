@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QvernoteClass</class>
+ <widget class="QMainWindow" name="QvernoteClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Evernote</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>8</number>
+    </property>
+    <property name="topMargin">
+     <number>4</number>
+    </property>
+    <property name="rightMargin">
+     <number>8</number>
+    </property>
+    <property name="bottomMargin">
+     <number>8</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>784</width>
+         <height>563</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pbNewNotebook">
+          <property name="text">
+           <string>New notebook</string>
+          </property>
+          <property name="icon">
+           <iconset resource="Resources/Icons.qrc">
+            <normaloff>:/IconAdd/general_add.png</normaloff>:/IconAdd/general_add.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QNonScrollableListWidget" name="lvNotebookList">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="autoScroll">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pbSync">
+          <property name="text">
+           <string>Synchronize</string>
+          </property>
+          <property name="icon">
+           <iconset resource="Resources/Icons.qrc">
+            <normaloff>:/IconAdd/general_refresh.png</normaloff>:/IconAdd/general_refresh.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionSearch"/>
+    <addaction name="actionDelete"/>
+    <addaction name="actionAbout"/>
+    <addaction name="actionTrash"/>
+    <addaction name="actionOptions"/>
+    <addaction name="actionFavorites"/>
+   </widget>
+   <addaction name="menuSettings"/>
+  </widget>
+  <action name="actionUse_SSL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use SSL</string>
+   </property>
+  </action>
+  <action name="actionAccount">
+   <property name="text">
+    <string>Login</string>
+   </property>
+  </action>
+  <action name="actionAutomatic">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Automatic</string>
+   </property>
+  </action>
+  <action name="actionPortrait">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Portrait</string>
+   </property>
+  </action>
+  <action name="actionLandscape">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Landscape</string>
+   </property>
+  </action>
+  <action name="actionSearch">
+   <property name="text">
+    <string>Search</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="text">
+    <string>Reload</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete notebooks</string>
+   </property>
+  </action>
+  <action name="actionManage_tags">
+   <property name="text">
+    <string>Manage tags</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionTrash">
+   <property name="text">
+    <string>Trash</string>
+   </property>
+  </action>
+  <action name="actionOnline">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Online</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionFavorites">
+   <property name="text">
+    <string>Favorites</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QNonScrollableListWidget</class>
+   <extends>QListWidget</extends>
+   <header>QNonScrollableListWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="Resources/Icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.3
+Type=Application
+Name=Evernote
+Exec=/opt/qvernote/qvernote.sh
+Icon=qvernote
+X-HildonDesk-ShowInToolbar=true
+X-Osso-Type=application/x-executable
+

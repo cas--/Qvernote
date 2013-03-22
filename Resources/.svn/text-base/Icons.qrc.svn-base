@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/IconAdd">
+        <file>general_stop.png</file>
+        <file>general_add.png</file>
+        <file>general_refresh.png</file>
+        <file>notes_save.png</file>
+        <file>notes_underline.png</file>
+        <file>general_italic.png</file>
+        <file>general_forward.png</file>
+        <file>general_delete.png</file>
+        <file>general_bold.png</file>
+        <file>general_back.png</file>
+    </qresource>
+</RCC>

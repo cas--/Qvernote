@@ -1,0 +1,57 @@
+Source: qvernote
+Section: user/office
+Priority: extra
+Maintainer: Sharky76 <burbulator@gmail.com>
+Build-Depends:  libqt4-dev, libqt4-sql-sqlite, libqtm-dev, debhelper (>= 5), libevernote-dev, thrift-dev, libboost1.38-dev, libssl-dev, libpoppler-qt4-dev, libqt4-phonon
+Standards-Version: 3.7.2
+
+Package: qvernote
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libevernote1.15, thrift0.2.0, libqtm-contacts, libpoppler-qt4-3, libqt4-phonon, libqtm-location
+Description: Evernote client
+ Full featured client for Evernote with offline synchronization support
+XSBC-Bugtracker: https://garage.maemo.org/tracker/?group_id=1668
+XB-Maemo-Display-Name: Qvernote
+XB-Maemo-Icon-26:
+ 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
+ gg==
+ ==== 
