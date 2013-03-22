@@ -26,12 +26,12 @@ using namespace evernote::edam;
 using namespace evernote::limits;
 using namespace boost;
 
-#define EDAM_CONSUMER_KEY "sharker76"
-#define EDAM_CONSUMER_SECRET "e2cf4349a6e0b44e"
-#define EVERNOTE_HOST	"www.evernote.com"
+#define EDAM_CONSUMER_KEY "casnote"
+#define EDAM_CONSUMER_SECRET "9515ef6237756747"
+#define EVERNOTE_HOST	"sandbox.evernote.com"
 #define EDAM_USER_STORE_PATH "/edam/user"
 #define EDAM_NOTE_STORE_PATH "/edam/note"
-#define EDAM_CLIENT_NAME "Evernote QT/4.6;Linux;Nokia N900"
+#define EDAM_CLIENT_NAME "Qvernote QT/4.6;Linux;Nokia N900"
 #define SYNC_UPDATE_RATE	5*60000 // 2 minutes
 
 class QvernoteAPI;
