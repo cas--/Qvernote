@@ -4,14 +4,16 @@ INCLUDEPATH += /usr/include/thrift \
     /usr/include/evernote \
     /usr/include/poppler/qt4
 LIBS = -lEvernote \
-    -lpoppler-qt4
+    -lpoppler-qt4 \
+    -lthrift
 QT += core \
     gui \
     webkit \
     xml \
     sql \
     phonon \
-   maemo5
+    network \
+    maemo5
 TRANSLATIONS += po/qvernote_ru.po \
     po/qvernote_he.po \
     po/qvernote_de.po \
@@ -36,7 +38,7 @@ TRANSLATIONS += po/qvernote_ru.po \
     po/qvernote_sv.po \
     po/qvernote_zh-cn.po \
     po/qvernote_zh-tw.po
-maemo5 { 
+maemo5 {
     DEFINES += Q_WS_MAEMO_5
     QT += dbus
     CONFIG += mobility
@@ -94,7 +96,12 @@ HEADERS += QAudioPreviewDialog.h \
     QvernoteAPI.h \
     QvernoteSettings.h \
     QvernoteView.h \
-    qvernotelogindialog.h
+    qvernotelogindialog.h \
+    logger/qsdebugoutput.h \
+    logger/qslogdest.h \
+    logger/qslog.h \
+    oauth/oauthtokenizer.h \
+    oauth/oauthwindow.h
 SOURCES += DataTypes/QFavorite.cpp \
     DataTypes/QNoteThumbnail.cpp \
     QSyncProgressDialog.cpp \
@@ -134,7 +141,12 @@ SOURCES += DataTypes/QFavorite.cpp \
     main.cpp \
     QvernoteView.cpp \
     qvernotelogindialog.cpp \
-    Qvernote.cpp
+    Qvernote.cpp \
+    logger/qsdebugoutput.cpp \
+    logger/qslog.cpp \
+    logger/qslogdest.cpp \
+    oauth/oauthtokenizer.cpp \
+    oauth/oauthwindow.cpp
 FORMS += QOptionsDialog.ui \
     QSyncProgressDialog.ui \
     QEmailNoteDialog.ui \
@@ -155,7 +167,7 @@ FORMS += QOptionsDialog.ui \
     QvernoteView.ui \
     qvernotelogindialog.ui
 RESOURCES += Resources/Icons.qrc
-unix { 
+unix {
     # VARIABLES
     PREFIX = debian/$${TARGET}
     BINDIR = $$PREFIX/opt/qvernote/
@@ -163,7 +175,7 @@ unix {
     DATADIR = $$PREFIX/usr/share
     DEFINES += DATADIR=\"$$DATADIR\" \
         PKGDATADIR=\"$$PKGDATADIR\"
-    
+
     # MAKE INSTALL
     INSTALLS += target \
         loader \

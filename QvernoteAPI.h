@@ -17,6 +17,20 @@
 #include <boost/shared_ptr.hpp>
 #include "QvernoteStorage.h"
 
+#include <inttypes.h>
+#include <iostream>
+#include <netinet/in.h>
+#include <stdint.h>
+
+#include <protocol/TBinaryProtocol.h>
+#include <transport/TServerSocket.h>
+#include <transport/TBufferTransports.h>
+#include <transport/TServerSocket.h>
+#include <transport/TBufferTransports.h>
+#include <transport/TSSLServerSocket.h>
+#include <transport/TSSLSocket.h>
+#include <server/TSimpleServer.h>
+
 using namespace std;
 using namespace apache::thrift;
 using namespace apache::thrift::protocol;
