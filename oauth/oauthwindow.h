@@ -48,12 +48,17 @@ public:
     bool error;
     QString errorMessage;
 
+    QSize sizeHint() const {
+		return QSize(800, 480);
+	}
+
 public slots:
     void tempAuthPageLoaded(bool rc);
     void permanentCredentialsReceived(bool rc);
     void userLoginReply(QNetworkReply *reply);
     void tempAuthPageReply(QNetworkReply *reply);
     void sslErrorHandler(QNetworkReply *qnr, const QList<QSslError>& errlist);
+
 
 };
 
