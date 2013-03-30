@@ -48,9 +48,6 @@ public:
     bool error;
     QString errorMessage;
 
-signals:
-    void permanentTokenFound(QString token);
-
 public slots:
     void tempAuthPageLoaded(bool rc);
     void permanentCredentialsReceived(bool rc);

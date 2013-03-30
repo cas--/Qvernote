@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "Qvernote.h"
 #include "QvernoteAPI.h"
 
+
 OAuthWindow::OAuthWindow(QWidget *parent) :
     QDialog(parent)
 {
@@ -41,12 +42,12 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
     int millis = tmb.millitm;
 
     // Create the URLs needed for authentication with Evernote
-    urlBase = "https://" + EVERNOTE_HOST;
-    accessUrlBase = urlBase + "/OAuth.action?"
+    urlBase = "https://" + QString(EVERNOTE_HOST);
+    accessUrlBase = urlBase + "/OAuth.action?";
     credUrlBase = urlBase +
-            "/oauth?oauth_consumer_key=" + EDAM_CONSUMER_KEY +
-            "&oauth_signature=" + EDAM_CONSUMER_SECRET +
-            "%26&oauth_signature_method=PLAINTEXT&oauth_timestamp="+ QString::number(time)+
+            "/oauth?oauth_consumer_key=" + QString(EDAM_CONSUMER_KEY) +
+            "&oauth_signature=" + QString(EDAM_CONSUMER_SECRET) +
+            "%26&oauth_signature_method=PLAINTEXT&oauth_timestamp=" + QString::number(time) +
             "&oauth_nonce=" + QString::number(millis);
     temporaryCredUrl = credUrlBase + "&oauth_callback=nnoauth";
     permanentCredUrl = credUrlBase + "&oauth_token=";
@@ -54,8 +55,12 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
     // Build the window
     setWindowTitle(tr("Please Grant Qvernote Access"));
     setWindowIcon(QIcon(":password.png"));
+    setContentsMargins(0, 0, 0, 0);
+    resize(800, 480);
+
     setLayout(&grid);
-    grid.addWidget(&userLoginPage);
+
+    //grid.addWidget(&userLoginPage);
 
     error = false;
     errorMessage = "";
