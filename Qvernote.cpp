@@ -21,6 +21,7 @@
 
 void InitThread::run()
 {
+	QLOG_DEBUG() << "InitThread::run()";
 	qDebug() << m_pQvernote->settings->getUsername() << ": " << m_pQvernote->settings->getUsername().length();
 
 	if(m_pQvernote->m_hEvernote->checkVersion() == true) {
@@ -44,6 +45,7 @@ void InitThread::run()
 Qvernote::Qvernote()
 : initThread(NULL)
 {
+	QLOG_DEBUG() << "initThread(NULL)";
 	settings = QvernoteSettings::Instance();
 	m_hEvernote = QvernoteAPI::Instance();
 	m_pWnd = new QvernoteView();
@@ -64,18 +66,20 @@ Qvernote::~Qvernote() {
 
 
 void Qvernote::Init() {
+	QLOG_DEBUG() << "Init";
 	QvernoteLoginDialog ld;
 
 	OAuthWindow window;
 	window.exec();
 	if (window.error) {
-		QLOG_DEBUG() << "Error";
+		QLOG_DEBUG() << "Error: " << window.errorMessage;
 		return;
 	}
 	if (window.response == "")
 		return;
 
-	QLOG_DEBUG() << "Response:" << window.response;
+	QLOG_DEBUG() << "Response: " << window.response;
+	//set the qvernote key
 
 	return;
 
