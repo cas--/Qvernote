@@ -24,6 +24,7 @@ void InitThread::run()
 	qDebug() << m_pQvernote->settings->getUsername() << ": " << m_pQvernote->settings->getUsername().length();
 
 	if(m_pQvernote->m_hEvernote->checkVersion() == true) {
+		return;
 		if(m_pQvernote->m_hEvernote->Authenticate(
 				m_pQvernote->settings->getUsername().toStdString(),
 				m_pQvernote->settings->getPassword().toStdString()))
