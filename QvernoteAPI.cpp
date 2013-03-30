@@ -15,8 +15,6 @@
 #include <protocol/TBinaryProtocol.h>
 #include <Thrift.h>
 #include <boost/shared_ptr.hpp>
-#include "QvernoteSettings.h"
-#include "QvernoteStorage.h"
 
 using namespace std;
 using namespace boost;
@@ -63,9 +61,7 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 		if(m_bIsOnline)
 		{
 			if(checkVersion() == true) {
-				if(Authenticate(
-						QvernoteSettings::Instance()->getUsername().toStdString(),
-						QvernoteSettings::Instance()->getPassword().toStdString()))
+				if(getAuthenticationToken())
 				{
 					reinitNoteStore();
 				}
@@ -130,6 +126,7 @@ void QvernoteAPI::reInitUserStore() {
 }
 
 bool QvernoteAPI::initNoteStore() {
+	userStoreClient->getUser(user, authToken);
 	string noteStorePath = string(EDAM_NOTE_STORE_PATH) + string("/") + getShardId();
 	//shared_ptr<TTransport> noteStoreHttpClient;
 	QvernoteSettings* settings = QvernoteSettings::Instance();
@@ -196,14 +193,15 @@ bool QvernoteAPI::checkVersion() {
 	return m_UserStoreClient->checkVersion(EDAM_CLIENT_NAME, usc.EDAM_VERSION_MAJOR, usc.EDAM_VERSION_MINOR);
 }
 
-bool QvernoteAPI::Authenticate(const string& userName, const string& password) {
+bool QvernoteAPI::Authenticate() {
 	if(!isOnline())
 	{
 		setError("Unable to connect to the network", 0);
 		return false;
 	}
 
-	m_AuthenticationResult = shared_ptr<AuthenticationResult>(new AuthenticationResult());
+	AuthenticationResult authenticationResult;
+	#m_AuthenticationResult = shared_ptr<AuthenticationResult>(new AuthenticationResult());
 
 	try {
 		reInitUserStore();

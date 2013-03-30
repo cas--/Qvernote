@@ -26,9 +26,8 @@ void InitThread::run()
 
 	if(m_pQvernote->m_hEvernote->checkVersion() == true) {
 		return;
-		if(m_pQvernote->m_hEvernote->Authenticate(
-				m_pQvernote->settings->getUsername().toStdString(),
-				m_pQvernote->settings->getPassword().toStdString()))
+		QLOG_DEBUG() << "InitThread::run()" << m_pQvernote->m_hEvernote->getAuthenticationToken();
+		if(m_pQvernote->m_hEvernote->getAuthenticationToken())
 		{
 			if(m_pQvernote->m_hEvernote->initNoteStore() == true)
 			{

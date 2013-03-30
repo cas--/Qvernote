@@ -16,6 +16,7 @@
 #include <NoteStore.h>
 #include <boost/shared_ptr.hpp>
 #include "QvernoteStorage.h"
+#include "QvernoteSettings.h"
 
 #include <inttypes.h>
 #include <iostream>
@@ -104,7 +105,7 @@ public:
 	void initLocalStore();
 
 	bool checkVersion();
-	bool Authenticate(const string& userName, const string& password);
+	bool Authenticate();
 	//bool refreshAuthentication();
 
 	bool	loadNotes(int maxNotes, const Notebook& notebook);
@@ -151,8 +152,13 @@ public:
 	bool removeExistingTag(const Tag& tag, Note& note);
 	bool sortTags(bool order);
 
-	string getAuthenticationToken() { return m_AuthenticationResult->authenticationToken; }
-	string getShardId() { return m_AuthenticationResult->user.shardId; }
+	string getAuthenticationToken() {
+		OAuthTokenizer tokenizer;
+		QString data = QvernoteSettings::Instance()->getOAuthToken();
+		tokenizer.tokenize(data);
+		return tokenizer.oauth_token.toStdString();
+	}
+	string getShardId() { return user.shardId; }
 
 	bool getSyncState(SyncState& syncState);
 	bool getSyncChunk(SyncChunk& syncChunk, int afterUSN, int maxEntries, bool isFullSync);
@@ -229,6 +235,8 @@ private:
 	AuthenticationThread* authThread;
 	SynchronizationThread* syncThread;
 	bool m_bIsOnline;
+	User user;
+	AuthenticationResult linkedAuthToken;
 };
 
 #endif /* QVERNOTEAPI_H_ */

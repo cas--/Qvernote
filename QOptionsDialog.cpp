@@ -19,10 +19,10 @@ QOptionsDialog::QOptionsDialog(QWidget *parent)
 	QvernoteSettings* settings = QvernoteSettings::Instance();
 	QList<QString> listValues;
 
-	ui.leUsername->setInputMethodHints(Qt::ImhPreferLowercase|Qt::ImhNoAutoUppercase);
-	ui.lePassword->setInputMethodHints(Qt::ImhPreferLowercase|Qt::ImhNoAutoUppercase|Qt::ImhHiddenText);
-	ui.leUsername->setText(settings->getUsername());
-	ui.lePassword->setText(settings->getPassword());
+	//ui.leUsername->setInputMethodHints(Qt::ImhPreferLowercase|Qt::ImhNoAutoUppercase);
+	//ui.lePassword->setInputMethodHints(Qt::ImhPreferLowercase|Qt::ImhNoAutoUppercase|Qt::ImhHiddenText);
+	//ui.leUsername->setText(settings->getUsername());
+	//ui.lePassword->setText(settings->getPassword());
 
 
 	QStandardItemModel* onlineSelectionModel = new QStandardItemModel(0, 1);
@@ -247,12 +247,12 @@ void QOptionsDialog::saveSettings()
 		configureOrientation(settings->getDisplayOrientation());
 	}
 
-	if(ui.leUsername->text() != settings->getUsername() || ui.lePassword->text() != settings->getPassword())
-	{
-		settings->setUsername(ui.leUsername->text());
-		settings->setPassword(ui.lePassword->text());
-		configureAccount();
-	}
+	//if(ui.leUsername->text() != settings->getUsername() || ui.lePassword->text() != settings->getPassword())
+	//{
+	//	settings->setUsername(ui.leUsername->text());
+	//	settings->setPassword(ui.lePassword->text());
+	//	configureAccount();
+	//}
 
 	if(protocolSelector->currentIndex() != settings->getUseSsl())
 	{
@@ -313,9 +313,7 @@ void QOptionsDialog::configureAccount()
 	QvernoteAPI* h = QvernoteAPI::Instance();
 	QvernoteSettings* settings = QvernoteSettings::Instance();
 
-	if(h->Authenticate(
-						settings->getUsername().toStdString(),
-						settings->getPassword().toStdString()))
+	if(h->getAuthenticationToken())
 	{
 		if(h->initNoteStore() == true)
 		{
