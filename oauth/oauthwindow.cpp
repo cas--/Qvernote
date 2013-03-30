@@ -33,8 +33,8 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
     QDialog(parent)
 {
 
-    consumerKey = "baumgarr-3523";
-    consumerSecret = "8d5ee175f8a5d3ec";
+    consumerKey = "casnote";
+    consumerSecret = "9515ef6237756747";
     urlBase = "https://sandbox.evernote.com";
     requestTokenUrl = urlBase + "/oauth";
     accessTokenUrl = urlBase + "/oauth";
