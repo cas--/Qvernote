@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QDialog>
 #include <QMessageBox>
+#include "oauth/oauthwindow.h"
+#include "oauth/oauthtokenizer.h"
 
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5InformationBox>
@@ -62,6 +64,19 @@ Qvernote::~Qvernote() {
 
 void Qvernote::Init() {
 	QvernoteLoginDialog ld;
+
+	OAuthWindow window;
+	window.exec();
+	if (window.error) {
+		QLOG_DEBUG() << "Error";
+		return;
+	}
+	if (window.response == "")
+		return;
+
+	QLOG_DEBUG() << "Response:" << window.response;
+
+	return;
 
 	if(settings->getUsername().length() == 0) {
 		if(ld.exec() == QDialog::Rejected)
