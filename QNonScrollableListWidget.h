@@ -26,7 +26,7 @@ public:
 		m_listItemHeight = height;
 	}
 public slots:
-	void rowsInserted ( const QModelIndex  & parent, int start, int end )
+	void rowsInserted ( const QModelIndex  & /*parent*/, int /*start*/, int /*end*/ )
 	{
 		//qDebug() << "Items height:" << count()*m_listItemHeight << "ListWidget height:" << height();
 		if(count()*m_listItemHeight > height())
