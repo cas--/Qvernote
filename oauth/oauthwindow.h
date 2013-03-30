@@ -51,15 +51,16 @@ public:
     QString response;
     bool error;
     QString errorMessage;
-    
+
 signals:
     void permanentTokenFound(QString token);
-    
+
 public slots:
     void tempAuthPageLoaded(bool rc);
     void permanentCredentialsReceived(bool rc);
     void userLoginReply(QNetworkReply *reply);
     void tempAuthPageReply(QNetworkReply *reply);
+    void sslErrorHandler(QNetworkReply *qnr, const QList<QSslError>& errlist);
 
 };
 

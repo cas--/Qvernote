@@ -93,12 +93,23 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
     // authentication process.
     QUrl tu(temporaryCredUrl);
     connect(&tempAuthPage, SIGNAL(loadFinished(bool)), this, SLOT(tempAuthPageLoaded(bool)));
-    connect(tempAuthPage.page()->networkAccessManager(),SIGNAL(finished(QNetworkReply*)), this, SLOT(tempAuthPageReply(QNetworkReply*)));
+    connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+    connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(tempAuthPageReply(QNetworkReply*)));
 
     QLOG_DEBUG() << "Temporary URL:" << tu.toString();
     tempAuthPage.load(tu);
 }
 
+void OAuthWindow::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
+    //#if DEBUG_ENABLED
+    //QLOG_DEBUG() << "---frmBuyIt::sslErrorHandler: ";
+    // show list of all ssl errors
+    //foreach (QSslError err, errlist)
+    //    QLOG_DEBUG() << "ssl error: " << err;
+    //#endif
+
+    qnr->ignoreSslErrors();
+}
 
 void OAuthWindow::tempAuthPageLoaded(bool rc) {
     QLOG_DEBUG() << "Temporary credentials received from Evernote";
@@ -120,7 +131,8 @@ void OAuthWindow::tempAuthPageLoaded(bool rc) {
     QUrl accessUrl(urlBase + "/OAuth.action?" + contents);
     QLOG_DEBUG() << "AccessUrl:" << accessUrl;
 
-    connect(userLoginPage.page()->networkAccessManager(),SIGNAL(finished(QNetworkReply*)),this,SLOT(userLoginReply(QNetworkReply*)));
+    connect(userLoginPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+    connect(userLoginPage.page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(userLoginReply(QNetworkReply*)));
     userLoginPage.load(accessUrl);
     grid.addWidget(&userLoginPage);
 }
