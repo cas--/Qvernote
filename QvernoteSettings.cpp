@@ -14,6 +14,7 @@ void QvernoteSettings::Load() {
 
 	LOAD_VAR(String(), Username, "qvernote/username", "");
 	LOAD_VAR(String(), Password, "qvernote/password", "");
+	LOAD_VAR(String(), OAuthToken, "qvernote/oauthtoken", "");
 	LOAD_VAR(Bool(), UseSsl, "qvernote/ssl", false);
 	m_DisplayOrientation = (DisplayOrientation)settings.value("qvernote/display", DO_LANDSCAPE).toInt();
 	LOAD_VAR(Int(), lastUpdateCount, "qvernote/lastupdatecount", 0);
@@ -33,6 +34,7 @@ void QvernoteSettings::Store() {
 
 	STORE_VAR("qvernote/username", Username);
 	STORE_VAR("qvernote/password", Password);
+	STORE_VAR("qvernote/oauthtoken", OAuthToken);
 	STORE_VAR("qvernote/ssl", UseSsl);
 	STORE_VAR("qvernote/display", DisplayOrientation);
 	STORE_VAR("qvernote/lastupdatecount", lastUpdateCount);

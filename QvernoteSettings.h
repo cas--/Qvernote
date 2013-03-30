@@ -58,6 +58,7 @@ public:
 
 	CONFIG_VAR(QString, Username)
 	CONFIG_VAR(QString, Password);
+	CONFIG_VAR(QString, OAuthToken);
 	CONFIG_VAR(bool, UseSsl);
 	CONFIG_VAR(DisplayOrientation, DisplayOrientation);
 	CONFIG_VAR(int, lastUpdateCount);
