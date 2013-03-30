@@ -157,13 +157,12 @@ void OAuthWindow::permanentCredentialsReceived(bool rc) {
     mainFrame = authRequestPage.page()->mainFrame();
     QString contents = mainFrame->toPlainText();
 
-
     if (!rc) {
         errorMessage = tr("Error receiving permanent credentials");
         QLOG_DEBUG() << "Bad return code while receiveng permanent credentials";
         error = true;
-        return;
         close();
+        return;
     }
 
     if (contents.startsWith("oauth_token=S%3D")) {
@@ -212,6 +211,7 @@ void OAuthWindow::userLoginReply(QNetworkReply *reply) {
             QLOG_DEBUG() << "Permanent URL: " << permanentCredUrl;
             QLOG_DEBUG() << "Token: " << token;
             connect(&authRequestPage, SIGNAL(loadFinished(bool)), this, SLOT(permanentCredentialsReceived(bool)));
+            connect(authRequestPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
             authRequestPage.load(QUrl(permanentCredUrl+token));
             userLoginPageLoaded = true;
         }
