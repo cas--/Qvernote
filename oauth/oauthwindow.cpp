@@ -27,36 +27,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QWebFrame>
 #include <QNetworkReply>
 #include <QSslConfiguration>
+
 #include "Qvernote.h"
+#include "QvernoteAPI.h"
 
 OAuthWindow::OAuthWindow(QWidget *parent) :
     QDialog(parent)
 {
-
-    consumerKey = "casnote";
-    consumerSecret = "9515ef6237756747";
-    urlBase = "https://sandbox.evernote.com";
-    requestTokenUrl = urlBase + "/oauth";
-    accessTokenUrl = urlBase + "/oauth";
-    authorizationUrlBase = urlBase + "/OAuth.action";
-    callbackUrl = "index.jsp?action=callbackReturn";
-
     struct timeb tmb;
 
     ftime(&tmb);
     int time = tmb.time;
     int millis = tmb.millitm;
 
-
     // Create the URLs needed for authentication with Evernote
-    temporaryCredUrl = "https://sandbox.evernote.com/oauth?oauth_consumer_key=" + consumerKey + "&oauth_signature=" +
-            consumerSecret + "%26&oauth_signature_method=PLAINTEXT&oauth_timestamp="+ QString::number(time)+
-            "&oauth_nonce=" + QString::number(millis) + "&oauth_callback=nnoauth";
-
-    permanentCredUrl = "https://sandbox.evernote.com/oauth?oauth_consumer_key=" + consumerKey + "&oauth_signature=" +
-            consumerSecret + "%26&oauth_signature_method=PLAINTEXT&oauth_timestamp=" + QString::number(time)+
-            "&oauth_nonce="+ QString::number(millis) + "&oauth_token=";
-
+    urlBase = "https://" + EVERNOTE_HOST;
+    accessUrlBase = urlBase + "/OAuth.action?"
+    credUrlBase = urlBase +
+            "/oauth?oauth_consumer_key=" + EDAM_CONSUMER_KEY +
+            "&oauth_signature=" + EDAM_CONSUMER_SECRET +
+            "%26&oauth_signature_method=PLAINTEXT&oauth_timestamp="+ QString::number(time)+
+            "&oauth_nonce=" + QString::number(millis);
+    temporaryCredUrl = credUrlBase + "&oauth_callback=nnoauth";
+    permanentCredUrl = credUrlBase + "&oauth_token=";
 
     // Build the window
     setWindowTitle(tr("Please Grant Qvernote Access"));
@@ -75,41 +68,29 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
         return;
     }
 
-
     // Turn on TLS (sometimes it isn't on by default)
     QSslConfiguration config = QSslConfiguration::defaultConfiguration();
     config.setProtocol(QSsl::TlsV1);
     config.setProtocol(QSsl::SslV3);
     QSslConfiguration::setDefaultConfiguration(config);
 
-
     // Since this page loads async, we need flags to be sure we don't load something twice
     authTokenReceived = false;
     userLoginPageLoaded = false;
-
 
     // Load the temporary URL to start the authentication procesess.  When
     // finished, this QWebView will contain the URL to start the
     // authentication process.
     QUrl tu(temporaryCredUrl);
     connect(&tempAuthPage, SIGNAL(loadFinished(bool)), this, SLOT(tempAuthPageLoaded(bool)));
-    connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+    connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
+            const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
     connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(tempAuthPageReply(QNetworkReply*)));
 
     QLOG_DEBUG() << "Temporary URL:" << tu.toString();
     tempAuthPage.load(tu);
 }
 
-void OAuthWindow::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
-    //#if DEBUG_ENABLED
-    //QLOG_DEBUG() << "---frmBuyIt::sslErrorHandler: ";
-    // show list of all ssl errors
-    //foreach (QSslError err, errlist)
-    //    QLOG_DEBUG() << "ssl error: " << err;
-    //#endif
-
-    qnr->ignoreSslErrors();
-}
 
 void OAuthWindow::tempAuthPageLoaded(bool rc) {
     QLOG_DEBUG() << "Temporary credentials received from Evernote";
@@ -128,10 +109,11 @@ void OAuthWindow::tempAuthPageLoaded(bool rc) {
     QLOG_DEBUG() << "Temporary Cred Contents: " << contents;
     int index = contents.indexOf("&oauth_token_secret");
     contents = contents.left(index);
-    QUrl accessUrl(urlBase + "/OAuth.action?" + contents);
+    QUrl accessUrl(accessUrlBase + contents);
     QLOG_DEBUG() << "AccessUrl:" << accessUrl;
 
-    connect(userLoginPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+    connect(userLoginPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
+            const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
     connect(userLoginPage.page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(userLoginReply(QNetworkReply*)));
     userLoginPage.load(accessUrl);
     grid.addWidget(&userLoginPage);
@@ -147,7 +129,6 @@ void OAuthWindow::tempAuthPageReply(QNetworkReply* reply) {
         return;
     }
 }
-
 
 
 void OAuthWindow::permanentCredentialsReceived(bool rc) {
@@ -185,15 +166,13 @@ void OAuthWindow::permanentCredentialsReceived(bool rc) {
 }
 
 
-
-
 void OAuthWindow::userLoginReply(QNetworkReply *reply) {
     if (userLoginPageLoaded)
         return;
-//    QLOG_DEBUG() << "Authentication reply received from Evernote";
-//    QLOG_DEBUG() << "error: " << reply->error();
+    QLOG_DEBUG() << "Authentication reply received from Evernote";
+    QLOG_DEBUG() << "error: " << reply->error();
     QString searchReq = "?oauth_token=";
-//    QLOG_DEBUG() << "Reply:" << reply->url().toString();
+    QLOG_DEBUG() << "Reply:" << reply->url().toString();
 
     int pos = reply->url().toString().indexOf(searchReq);
     if (pos>0) {
@@ -211,15 +190,19 @@ void OAuthWindow::userLoginReply(QNetworkReply *reply) {
             QLOG_DEBUG() << "Permanent URL: " << permanentCredUrl;
             QLOG_DEBUG() << "Token: " << token;
             connect(&authRequestPage, SIGNAL(loadFinished(bool)), this, SLOT(permanentCredentialsReceived(bool)));
-            connect(authRequestPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
-            authRequestPage.load(QUrl(permanentCredUrl+token));
+            connect(authRequestPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
+                    const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+            authRequestPage.load(QUrl(permanentCredUrl + token));
             userLoginPageLoaded = true;
         }
     }
 }
 
 
-
-
-
-
+void OAuthWindow::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
+    //QLOG_DEBUG() << "---frmBuyIt::sslErrorHandler: ";
+    // show list of all ssl errors
+    //foreach (QSslError err, errlist)
+    //    QLOG_DEBUG() << "ssl error: " << err;
+    qnr->ignoreSslErrors();
+}

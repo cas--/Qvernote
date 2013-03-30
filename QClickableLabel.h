@@ -5,8 +5,8 @@
  *      Author: alexr
  */
 
-#ifndef QCLICKABLELABLE_H_
-#define QCLICKABLELABLE_H_
+#ifndef QCLICKABLELABEL_H_
+#define QCLICKABLELABEL_H_
 
 #include <QLabel>
 #include <QPainter>
@@ -129,4 +129,4 @@ private:
 
 };
 
-#endif /* QCLICKABLELABLE_H_ */
+#endif /* QCLICKABLELABEL_H_ */

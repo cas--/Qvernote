@@ -34,15 +34,11 @@ private:
     QWebView userLoginPage;
     QWebView authRequestPage;
     QGridLayout grid;
-    QString consumerKey;
-    QString consumerSecret;
     QString temporaryCredUrl;
     QString permanentCredUrl;
     QString urlBase;
-    QString requestTokenUrl;
-    QString accessTokenUrl;
-    QString authorizationUrlBase;
-    QString callbackUrl;
+    QString credUrlBase;
+    QString accessUrlBase;
     bool authTokenReceived;
     bool userLoginPageLoaded;
 
