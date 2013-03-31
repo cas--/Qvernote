@@ -17,6 +17,9 @@
 #include <boost/shared_ptr.hpp>
 #include "QvernoteStorage.h"
 #include "QvernoteSettings.h"
+#include "oauth/oauthtokenizer.h"
+#include "logger/qslog.h"
+
 
 #include <inttypes.h>
 #include <iostream>
@@ -106,6 +109,12 @@ public:
 
 	bool checkVersion();
 	bool Authenticate();
+	bool checkAuthenticateToken() {
+		if (getAuthenticationToken() != "")
+			return true;
+
+		return false;
+	};
 	//bool refreshAuthentication();
 
 	bool	loadNotes(int maxNotes, const Notebook& notebook);
@@ -236,7 +245,6 @@ private:
 	SynchronizationThread* syncThread;
 	bool m_bIsOnline;
 	User user;
-	AuthenticationResult linkedAuthToken;
 };
 
 #endif /* QVERNOTEAPI_H_ */

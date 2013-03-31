@@ -313,7 +313,7 @@ void QOptionsDialog::configureAccount()
 	QvernoteAPI* h = QvernoteAPI::Instance();
 	QvernoteSettings* settings = QvernoteSettings::Instance();
 
-	if(h->getAuthenticationToken())
+	if(h->checkAuthenticateToken())
 	{
 		if(h->initNoteStore() == true)
 		{

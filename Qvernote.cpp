@@ -21,13 +21,10 @@
 
 void InitThread::run()
 {
-	QLOG_DEBUG() << "InitThread::run()";
-	qDebug() << m_pQvernote->settings->getUsername() << ": " << m_pQvernote->settings->getUsername().length();
+	QLOG_DEBUG() << "InitThread::run";
 
 	if(m_pQvernote->m_hEvernote->checkVersion() == true) {
-		return;
-		QLOG_DEBUG() << "InitThread::run()" << m_pQvernote->m_hEvernote->getAuthenticationToken();
-		if(m_pQvernote->m_hEvernote->getAuthenticationToken())
+		if(m_pQvernote->m_hEvernote->checkAuthenticateToken())
 		{
 			if(m_pQvernote->m_hEvernote->initNoteStore() == true)
 			{
@@ -44,12 +41,10 @@ void InitThread::run()
 Qvernote::Qvernote()
 : initThread(NULL)
 {
-	QLOG_DEBUG() << "initThread(NULL)";
 	settings = QvernoteSettings::Instance();
 	m_hEvernote = QvernoteAPI::Instance();
 	m_pWnd = new QvernoteView();
 	m_pWnd->show();
-
 
 	QObject::connect(this, SIGNAL(noteStoreInitialized()), m_pWnd, SLOT(initView()));
 	QObject::connect(this, SIGNAL(noteStoreFailed(QString)), this, SLOT(qvernoteShutdown(QString)));
@@ -66,25 +61,19 @@ Qvernote::~Qvernote() {
 
 void Qvernote::Init() {
 	QLOG_DEBUG() << "Init";
-	QvernoteLoginDialog ld;
 
-	OAuthWindow window;
-	window.exec();
-	if (window.error) {
-		QLOG_DEBUG() << "Error: " << window.errorMessage;
-		return;
+	if(settings->getOAuthToken().length() == 0) {
+		OAuthWindow window;
+		window.exec();
+		if (window.error) {
+			QLOG_DEBUG() << "Error: " << window.errorMessage;
+			return;
+		}
+		if (window.response == "")
+			return;
+
+		settings->setOAuthToken(window.response);
 	}
-	if (window.response == "")
-		return;
-
-	QLOG_DEBUG() << "Response: " << window.response;
-	settings->setOAuthToken(window.response);
-	QLOG_DEBUG() << "check setting: " << settings->getOAuthToken();
-
-	//if(settings->getUsername().length() == 0) {
-	//	if(ld.exec() == QDialog::Rejected)
-	//		return;
-	//}
 
 	if(settings->getWorkOnline() == false)
 	{
@@ -106,13 +95,11 @@ void Qvernote::Init() {
 void Qvernote::qvernoteShutdown(QString error)
 {
 #ifdef Q_WS_MAEMO_5
-	QMaemo5InformationBox::information(0, QString(trUtf8("Login error:  ")) + QString(error));
+	QMaemo5InformationBox::information(0, QString(trUtf8("Error:  ")) + QString(error));
 #else
-	QMessageBox::critical(0, trUtf8("Login error"), error);
+	QMessageBox::critical(0, trUtf8("Error"), error);
 #endif
 	//m_hEvernote->reInitUserStore();
-	settings->setUsername("");
-	settings->setPassword("");
 	Init();
 	//exit(1);
 }

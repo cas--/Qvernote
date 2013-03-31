@@ -61,7 +61,7 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 		if(m_bIsOnline)
 		{
 			if(checkVersion() == true) {
-				if(getAuthenticationToken())
+				if(checkAuthenticateToken())
 				{
 					reinitNoteStore();
 				}
@@ -100,13 +100,24 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 
 bool QvernoteAPI::initUserStore() {
 	try {
-		shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-		shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
-		shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
-		userStoreHttpClient = shared_ptr<THttpClient>(new THttpClient(bufferedTransport, EVERNOTE_HOST, EDAM_USER_STORE_PATH));
+		QLOG_DEBUG() << "userstore";
+		QvernoteSettings* settings = QvernoteSettings::Instance();
+		if(settings->getUseSsl() == true)
+		{
+			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
+			QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
+			QLOG_DEBUG() << "userstore dir:" << pgmDir;
+			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
+			sslSocketFactory->authenticate(false);
 
-		//shared_ptr<THttpClient> userStoreHttpClient(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
-
+			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
+			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
+			userStoreHttpClient = shared_ptr<THttpClient>(new THttpClient(bufferedTransport, EVERNOTE_HOST, EDAM_USER_STORE_PATH));
+		}
+		else {
+			// use http
+			userStoreHttpClient= shared_ptr<THttpClient>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
+		}
 		userStoreHttpClient->open();
 		shared_ptr<TProtocol> iprot(new TBinaryProtocol(userStoreHttpClient));
 		m_UserStoreClient = shared_ptr<UserStoreClient>(new UserStoreClient(iprot));
@@ -126,21 +137,24 @@ void QvernoteAPI::reInitUserStore() {
 }
 
 bool QvernoteAPI::initNoteStore() {
-	userStoreClient->getUser(user, authToken);
+	m_UserStoreClient->getUser(user, getAuthenticationToken());
 	string noteStorePath = string(EDAM_NOTE_STORE_PATH) + string("/") + getShardId();
-	//shared_ptr<TTransport> noteStoreHttpClient;
 	QvernoteSettings* settings = QvernoteSettings::Instance();
 
 	try {
 		if(settings->getUseSsl() == true)
 		{
+			QLOG_DEBUG() << "attempting ssl connection";
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
+			QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
+			QLOG_DEBUG() << "userstore dir:" << pgmDir;
+			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
+			sslSocketFactory->authenticate(true);
 			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, noteStorePath));
 		}
-		else
-		{
+		else {
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, noteStorePath));
 		}
 
@@ -182,6 +196,7 @@ void QvernoteAPI::initLocalStore() {
 }
 
 bool QvernoteAPI::checkVersion() {
+	QLOG_DEBUG() << "attempting to check version!";
 	UserStoreConstants usc;
 
 	if(!isOnline())
@@ -200,17 +215,11 @@ bool QvernoteAPI::Authenticate() {
 		return false;
 	}
 
-	AuthenticationResult authenticationResult;
-	#m_AuthenticationResult = shared_ptr<AuthenticationResult>(new AuthenticationResult());
+	//AuthenticationResult authenticationResult;
+	//m_AuthenticationResult = shared_ptr<AuthenticationResult>(new AuthenticationResult());
 
 	try {
 		reInitUserStore();
-		m_UserStoreClient->authenticate(
-				*m_AuthenticationResult,
-				userName,
-				password,
-				EDAM_CONSUMER_KEY,
-				EDAM_CONSUMER_SECRET);
 	} catch(EDAMUserException& e) {
 		qDebug() << e.parameter.c_str();
 		setError(e.parameter, e.errorCode);
