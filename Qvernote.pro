@@ -97,9 +97,6 @@ HEADERS += QAudioPreviewDialog.h \
     QvernoteSettings.h \
     QvernoteView.h \
     qvernotelogindialog.h \
-    logger/qsdebugoutput.h \
-    logger/qslogdest.h \
-    logger/qslog.h \
     oauth/oauthtokenizer.h \
     oauth/oauthwindow.h
 SOURCES += DataTypes/QFavorite.cpp \
@@ -142,9 +139,6 @@ SOURCES += DataTypes/QFavorite.cpp \
     QvernoteView.cpp \
     qvernotelogindialog.cpp \
     Qvernote.cpp \
-    logger/qsdebugoutput.cpp \
-    logger/qslog.cpp \
-    logger/qslogdest.cpp \
     oauth/oauthtokenizer.cpp \
     oauth/oauthwindow.cpp
 FORMS += QOptionsDialog.ui \

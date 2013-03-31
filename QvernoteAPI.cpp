@@ -100,13 +100,13 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 
 bool QvernoteAPI::initUserStore() {
 	try {
-		QLOG_DEBUG() << "userstore";
+		qDebug() << "userstore";
 		QvernoteSettings* settings = QvernoteSettings::Instance();
 		if(settings->getUseSsl() == true)
 		{
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
 			QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
-			QLOG_DEBUG() << "userstore dir:" << pgmDir;
+			qDebug() << "userstore dir:" << pgmDir;
 			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
 			sslSocketFactory->authenticate(false);
 
@@ -144,10 +144,10 @@ bool QvernoteAPI::initNoteStore() {
 	try {
 		if(settings->getUseSsl() == true)
 		{
-			QLOG_DEBUG() << "attempting ssl connection";
+			qDebug() << "attempting ssl connection";
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
 			QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
-			QLOG_DEBUG() << "userstore dir:" << pgmDir;
+			qDebug() << "userstore dir:" << pgmDir;
 			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
 			sslSocketFactory->authenticate(true);
 			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
@@ -196,7 +196,7 @@ void QvernoteAPI::initLocalStore() {
 }
 
 bool QvernoteAPI::checkVersion() {
-	QLOG_DEBUG() << "attempting to check version!";
+	qDebug() << "attempting to check version!";
 	UserStoreConstants usc;
 
 	if(!isOnline())

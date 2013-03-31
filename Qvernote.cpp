@@ -21,7 +21,7 @@
 
 void InitThread::run()
 {
-	QLOG_DEBUG() << "InitThread::run";
+	qDebug() << "InitThread::run";
 
 	if(m_pQvernote->m_hEvernote->checkVersion() == true) {
 		if(m_pQvernote->m_hEvernote->checkAuthenticateToken())
@@ -60,13 +60,13 @@ Qvernote::~Qvernote() {
 
 
 void Qvernote::Init() {
-	QLOG_DEBUG() << "Init";
+	qDebug() << "Init";
 
 	if(settings->getOAuthToken().length() == 0) {
 		OAuthWindow window;
 		window.exec();
 		if (window.error) {
-			QLOG_DEBUG() << "Error: " << window.errorMessage;
+			qDebug() << "Error: " << window.errorMessage;
 			return;
 		}
 		if (window.response == "")

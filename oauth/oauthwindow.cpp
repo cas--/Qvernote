@@ -92,30 +92,30 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
             const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
     connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(tempAuthPageReply(QNetworkReply*)));
 
-    QLOG_DEBUG() << "Temporary URL:" << tu.toString();
+    qDebug() << "Temporary URL:" << tu.toString();
     tempAuthPage.load(tu);
 }
 
 
 void OAuthWindow::tempAuthPageLoaded(bool rc) {
-    QLOG_DEBUG() << "Temporary credentials received from Evernote";
+    qDebug() << "Temporary credentials received from Evernote";
     if (!rc) {
         errorMessage = tr("Error receiving temporary credentials");
         error = true;
         QWebFrame *mainFrame = tempAuthPage.page()->mainFrame();
         QString contents = mainFrame->toHtml();
-        QLOG_DEBUG() << "Reply contents:" << contents;
+        qDebug() << "Reply contents:" << contents;
         close();
         return;
     }
 
     QWebFrame *mainFrame = tempAuthPage.page()->mainFrame();
     QString contents = mainFrame->toPlainText();
-    QLOG_DEBUG() << "Temporary Cred Contents: " << contents;
+    qDebug() << "Temporary Cred Contents: " << contents;
     int index = contents.indexOf("&oauth_token_secret");
     contents = contents.left(index);
     QUrl accessUrl(accessUrlBase + contents);
-    QLOG_DEBUG() << "AccessUrl:" << accessUrl;
+    qDebug() << "AccessUrl:" << accessUrl;
 
     connect(userLoginPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
             const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
@@ -126,11 +126,11 @@ void OAuthWindow::tempAuthPageLoaded(bool rc) {
 
 
 void OAuthWindow::tempAuthPageReply(QNetworkReply* reply) {
-    QLOG_DEBUG() << "error: " << reply->error();
+    qDebug() << "error: " << reply->error();
     if (reply->error() != QNetworkReply::NoError) {
         int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-//        QLOG_DEBUG() << "status:" << statusCode;
-//        QLOG_DEBUG() << "error: " << reply->error();
+//        qDebug() << "status:" << statusCode;
+//        qDebug() << "error: " << reply->error();
         return;
     }
 }
@@ -145,17 +145,17 @@ void OAuthWindow::permanentCredentialsReceived(bool rc) {
 
     if (!rc) {
         errorMessage = tr("Error receiving permanent credentials");
-        QLOG_DEBUG() << "Bad return code while receiveng permanent credentials";
+        qDebug() << "Bad return code while receiveng permanent credentials";
         error = true;
         close();
         return;
     }
 
     if (contents.startsWith("oauth_token=S%3D")) {
-        QLOG_DEBUG() << "Permanent Auth Response: " << contents;
-        QLOG_DEBUG() << "Permanent credentials received received from Evernote";
+        qDebug() << "Permanent Auth Response: " << contents;
+        qDebug() << "Permanent credentials received received from Evernote";
         authTokenReceived = true;
-        QLOG_DEBUG() << "Good authorization token received.";
+        qDebug() << "Good authorization token received.";
         QString decoded;
         QByteArray enc;
         enc.append(contents);
@@ -174,10 +174,10 @@ void OAuthWindow::permanentCredentialsReceived(bool rc) {
 void OAuthWindow::userLoginReply(QNetworkReply *reply) {
     if (userLoginPageLoaded)
         return;
-    QLOG_DEBUG() << "Authentication reply received from Evernote";
-    QLOG_DEBUG() << "error: " << reply->error();
+    qDebug() << "Authentication reply received from Evernote";
+    qDebug() << "error: " << reply->error();
     QString searchReq = "?oauth_token=";
-    QLOG_DEBUG() << "Reply:" << reply->url().toString();
+    qDebug() << "Reply:" << reply->url().toString();
 
     int pos = reply->url().toString().indexOf(searchReq);
     if (pos>0) {
@@ -191,9 +191,9 @@ void OAuthWindow::userLoginReply(QNetworkReply *reply) {
         }
 
         if (reply->isFinished()) {
-            QLOG_DEBUG() << "Loading URL";
-            QLOG_DEBUG() << "Permanent URL: " << permanentCredUrl;
-            QLOG_DEBUG() << "Token: " << token;
+            qDebug() << "Loading URL";
+            qDebug() << "Permanent URL: " << permanentCredUrl;
+            qDebug() << "Token: " << token;
             connect(&authRequestPage, SIGNAL(loadFinished(bool)), this, SLOT(permanentCredentialsReceived(bool)));
             connect(authRequestPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
                     const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
@@ -205,9 +205,9 @@ void OAuthWindow::userLoginReply(QNetworkReply *reply) {
 
 
 void OAuthWindow::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
-    //QLOG_DEBUG() << "---frmBuyIt::sslErrorHandler: ";
+    //qDebug() << "---frmBuyIt::sslErrorHandler: ";
     // show list of all ssl errors
     //foreach (QSslError err, errlist)
-    //    QLOG_DEBUG() << "ssl error: " << err;
+    //    qDebug() << "ssl error: " << err;
     qnr->ignoreSslErrors();
 }

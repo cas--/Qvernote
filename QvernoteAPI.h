@@ -18,7 +18,6 @@
 #include "QvernoteStorage.h"
 #include "QvernoteSettings.h"
 #include "oauth/oauthtokenizer.h"
-#include "logger/qslog.h"
 
 
 #include <inttypes.h>

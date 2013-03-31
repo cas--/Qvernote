@@ -12,8 +12,7 @@
 #include "QvernoteSettings.h"
 #include "QvernoteAPI.h"
 #include <QThread>
-#include "logger/qslog.h"
-#include "logger/qslogdest.h"
+
 
 class Qvernote;
 class InitThread : public QThread
