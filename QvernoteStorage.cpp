@@ -20,6 +20,7 @@ QvernoteStorage::QvernoteStorage()
 	path.append(QDir::separator()).append(QVERNOTE_DB);
 	path = QDir::toNativeSeparators(path);
 	db.setDatabaseName(path);
+	qDebug() << __FUNCTION__ << "Database path set to: " << path;
 
 
 	if(!db.isValid())

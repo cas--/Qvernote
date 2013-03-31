@@ -18,16 +18,16 @@
 #endif
 
 
-
 void InitThread::run()
 {
-	qDebug() << "InitThread::run";
+	qDebug() << __FUNCTION__;
 
 	if(m_pQvernote->m_hEvernote->checkVersion() == true) {
 		if(m_pQvernote->m_hEvernote->checkAuthenticateToken())
 		{
 			if(m_pQvernote->m_hEvernote->initNoteStore() == true)
 			{
+				qDebug() << "notestore init'd now trying localstore";
 				m_pQvernote->m_hEvernote->initLocalStore();
 				emit m_pQvernote->noteStoreInitialized();
 				return;
@@ -37,6 +37,7 @@ void InitThread::run()
 
 	emit m_pQvernote->noteStoreFailed(QString(m_pQvernote->m_hEvernote->getLastErrorString().c_str()));
 }
+
 
 Qvernote::Qvernote()
 : initThread(NULL)
@@ -50,6 +51,7 @@ Qvernote::Qvernote()
 	QObject::connect(this, SIGNAL(noteStoreFailed(QString)), this, SLOT(qvernoteShutdown(QString)));
 
 }
+
 
 Qvernote::~Qvernote() {
 	QvernoteSettings::Instance()->Store();
@@ -73,6 +75,7 @@ void Qvernote::Init() {
 			return;
 
 		settings->setOAuthToken(window.response);
+		settings->Store();
 	}
 
 	if(settings->getWorkOnline() == false)
@@ -91,6 +94,7 @@ void Qvernote::Init() {
 		emit noteStoreInitialized();
 	}
 }
+
 
 void Qvernote::qvernoteShutdown(QString error)
 {

@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	a.installTranslator(&aTranslator);
 
 	// Show Qt version
-	qDebug() << "Built with Qt" << QT_VERSION_STR << "running on" << qVersion();
+	qDebug() << "Qvernote: built with Qt" << QT_VERSION_STR << "running on" << qVersion();
 
 	Qvernote wndLoader;
 	wndLoader.Init();
