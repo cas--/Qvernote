@@ -100,7 +100,7 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 
 bool QvernoteAPI::initUserStore() {
 	try {
-		qDebug() << __FUNCTION__ << "init userstore";
+		qDebug() << __FUNCTION__;
 		QvernoteSettings* settings = QvernoteSettings::Instance();
 		if(settings->getUseSsl() == true)
 		{
@@ -137,7 +137,8 @@ void QvernoteAPI::reInitUserStore() {
 }
 
 bool QvernoteAPI::initNoteStore() {
-	m_UserStoreClient->getUser(user, getAuthenticationToken());
+	qDebug() << __FUNCTION__;
+
 	string noteStorePath = string(EDAM_NOTE_STORE_PATH) + string("/") + getShardId();
 	QvernoteSettings* settings = QvernoteSettings::Instance();
 
@@ -157,12 +158,12 @@ bool QvernoteAPI::initNoteStore() {
 		else {
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, noteStorePath));
 		}
-
 		noteStoreHttpClient->open();
 		shared_ptr<TProtocol> noteStoreProtocol(new TBinaryProtocol(noteStoreHttpClient));
 		m_NoteStoreClient = shared_ptr<NoteStoreClient>(new NoteStoreClient(noteStoreProtocol));
+		m_UserStoreClient->getUser(user, getAuthenticationToken());
 	} catch(TTransportException& e) {
-		qDebug() << e.what();
+		qDebug() << __FUNCTION__ << e.what();
 		setError(e.what(), e.getType());
 		return false;
 	}
