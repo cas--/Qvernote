@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=0.3
 Type=Application
-Name=Evernote
+Name=Qvernote
 Exec=/opt/qvernote/qvernote.sh
 Icon=qvernote
 X-HildonDesk-ShowInToolbar=true
