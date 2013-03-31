@@ -65,8 +65,8 @@ bool QvernoteStorage::initDB()
 	QSqlQuery query(db);
 	bool ret = false;
 
-	QvernoteSettings::Instance()->setlastSyncTime(0);
-	QvernoteSettings::Instance()->setlastUpdateCount(0);
+	QvernoteSettings::Instance()->setLastSyncTime(0);
+	QvernoteSettings::Instance()->setLastUpdateCount(0);
 
 	qDebug() << __FUNCTION__;
 

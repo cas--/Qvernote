@@ -100,7 +100,7 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 
 bool QvernoteAPI::initUserStore() {
 	try {
-		qDebug() << "userstore";
+		qDebug() << __FUNCTION__ << "init userstore";
 		QvernoteSettings* settings = QvernoteSettings::Instance();
 		if(settings->getUseSsl() == true)
 		{
@@ -186,10 +186,12 @@ bool QvernoteAPI::reinitNoteStore() {
 }
 
 void QvernoteAPI::initLocalStore() {
+	qDebug() << __FUNCTION__;
 	m_LocalStoreClient = QvernoteStorage::Instance();
 
 	if(m_LocalStoreClient->isEnabled() && isOnline())
 	{
+		qDebug() << __FUNCTION__ << "enabled and online";
 		//synchronizeLocalStorage();
 		syncThread->start();
 	}
@@ -1118,8 +1120,8 @@ bool QvernoteAPI::synchronizeLocalStorage() {
 		return true;
 	}
 
-	m_nLastUpdateCount = QvernoteSettings::Instance()->getlastUpdateCount();
-	m_nLastSyncTime = QvernoteSettings::Instance()->getlastSyncTime();
+	m_nLastUpdateCount = QvernoteSettings::Instance()->getLastUpdateCount();
+	m_nLastSyncTime = QvernoteSettings::Instance()->getLastSyncTime();
 
 	if(getSyncState(syncState) == true)
 	{
@@ -1169,8 +1171,8 @@ bool QvernoteAPI::synchronizeFull()
 				if(!updateDB(syncChunk))
 					return false;
 
-				QvernoteSettings::Instance()->setlastUpdateCount(syncChunk.updateCount);
-				QvernoteSettings::Instance()->setlastSyncTime(syncChunk.currentTime);
+				QvernoteSettings::Instance()->setLastUpdateCount(syncChunk.updateCount);
+				QvernoteSettings::Instance()->setLastSyncTime(syncChunk.currentTime);
 				break;
 			}
 		}
@@ -1203,8 +1205,8 @@ bool QvernoteAPI::synchronizeChanges()
 			{
 				if(!updateDB(syncChunk))
 					return false;
-				QvernoteSettings::Instance()->setlastUpdateCount(syncChunk.updateCount);
-				QvernoteSettings::Instance()->setlastSyncTime(syncChunk.currentTime);
+				QvernoteSettings::Instance()->setLastUpdateCount(syncChunk.updateCount);
+				QvernoteSettings::Instance()->setLastSyncTime(syncChunk.currentTime);
 				break;
 			}
 		}
@@ -1374,7 +1376,7 @@ bool QvernoteAPI::sendDirtyTags()
 			continue;
 		}
 
-		QvernoteSettings::Instance()->setlastUpdateCount((*i).updateSequenceNum);
+		QvernoteSettings::Instance()->setLastUpdateCount((*i).updateSequenceNum);
 		QTag::updateServerData(m_LocalStoreClient->getDB(), *i);
 	}
 
@@ -1398,7 +1400,7 @@ bool QvernoteAPI::sendDirtyTags()
 		}
 
 		(*i).updateSequenceNum = newUSN;
-		QvernoteSettings::Instance()->setlastUpdateCount((*i).updateSequenceNum);
+		QvernoteSettings::Instance()->setLastUpdateCount((*i).updateSequenceNum);
 		QTag::updateServerData(m_LocalStoreClient->getDB(), *i);
 	}
 
@@ -1452,7 +1454,7 @@ bool QvernoteAPI::sendDirtyNotebooks()
 		}
 
 		(*i).updateSequenceNum = newUSN;
-		QvernoteSettings::Instance()->setlastUpdateCount((*i).updateSequenceNum);
+		QvernoteSettings::Instance()->setLastUpdateCount((*i).updateSequenceNum);
 		QNotebook::updateServerData(m_LocalStoreClient->getDB(), *i);
 	}
 
@@ -1506,7 +1508,7 @@ bool QvernoteAPI::sendDirtyNotes()
 			continue;
 		}
 
-		QvernoteSettings::Instance()->setlastUpdateCount((*i).updateSequenceNum);
+		QvernoteSettings::Instance()->setLastUpdateCount((*i).updateSequenceNum);
 		QNote::updateServerData(m_LocalStoreClient->getDB(), *i);
 	}
 
@@ -1528,7 +1530,7 @@ bool QvernoteAPI::sendDirtyNotes()
 			continue;
 		}
 
-		QvernoteSettings::Instance()->setlastUpdateCount((*i).updateSequenceNum);
+		QvernoteSettings::Instance()->setLastUpdateCount((*i).updateSequenceNum);
 		QNote::updateServerData(m_LocalStoreClient->getDB(), *i);
 		QItem::setDirtyFlag(m_LocalStoreClient->getDB(), "notes", "guid", QString::fromStdString((*i).guid), 0);
 	}

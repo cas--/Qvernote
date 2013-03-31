@@ -56,13 +56,11 @@ public:
 	}
 
 
-	CONFIG_VAR(QString, Username)
-	CONFIG_VAR(QString, Password);
 	CONFIG_VAR(QString, OAuthToken);
 	CONFIG_VAR(bool, UseSsl);
 	CONFIG_VAR(DisplayOrientation, DisplayOrientation);
-	CONFIG_VAR(int, lastUpdateCount);
-	CONFIG_VAR(qint64, lastSyncTime)
+	CONFIG_VAR(int, LastUpdateCount);
+	CONFIG_VAR(qint64, LastSyncTime);
 	CONFIG_VAR(bool, WorkOnline);
 	CONFIG_VAR(NotesView, NotesView);
 	CONFIG_VAR(NoteDisplayOrder, NoteDisplayOrder);

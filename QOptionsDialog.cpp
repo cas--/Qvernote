@@ -311,7 +311,6 @@ void QOptionsDialog::configureOnlineMode(bool checked)
 void QOptionsDialog::configureAccount()
 {
 	QvernoteAPI* h = QvernoteAPI::Instance();
-	QvernoteSettings* settings = QvernoteSettings::Instance();
 
 	if(h->checkAuthenticateToken())
 	{
@@ -363,7 +362,7 @@ void QOptionsDialog::deleteThumbnails()
 void QOptionsDialog::dropDB()
 {
 	QvernoteStorage::Instance()->clearDatabase();
-	QvernoteSettings::Instance()->setlastUpdateCount(0);
+	QvernoteSettings::Instance()->setLastUpdateCount(0);
 	emit triggerClearNotebookList();
 }
 

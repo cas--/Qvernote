@@ -12,13 +12,11 @@ QvernoteSettings* QvernoteSettings::settings = NULL;
 void QvernoteSettings::Load() {
 	QSettings settings("qvernote");
 
-	LOAD_VAR(String(), Username, "qvernote/username", "");
-	LOAD_VAR(String(), Password, "qvernote/password", "");
 	LOAD_VAR(String(), OAuthToken, "qvernote/oauthtoken", "");
 	LOAD_VAR(Bool(), UseSsl, "qvernote/ssl", false);
 	m_DisplayOrientation = (DisplayOrientation)settings.value("qvernote/display", DO_LANDSCAPE).toInt();
-	LOAD_VAR(Int(), lastUpdateCount, "qvernote/lastupdatecount", 0);
-	LOAD_VAR(ULongLong(), lastSyncTime, "qvernote/lastsynctime", 0);
+	LOAD_VAR(Int(), LastUpdateCount, "qvernote/lastupdatecount", 0);
+	LOAD_VAR(ULongLong(), LastSyncTime, "qvernote/lastsynctime", 0);
 	LOAD_VAR(Bool(), WorkOnline, "qvernote/online", true);
 
 	m_NotesView = (NotesView)settings.value("qvernote/notesview", NV_LIST).toInt();
@@ -32,13 +30,11 @@ void QvernoteSettings::Load() {
 void QvernoteSettings::Store() {
 	QSettings settings("qvernote");
 
-	STORE_VAR("qvernote/username", Username);
-	STORE_VAR("qvernote/password", Password);
 	STORE_VAR("qvernote/oauthtoken", OAuthToken);
 	STORE_VAR("qvernote/ssl", UseSsl);
 	STORE_VAR("qvernote/display", DisplayOrientation);
-	STORE_VAR("qvernote/lastupdatecount", lastUpdateCount);
-	STORE_VAR("qvernote/lastsynctime", lastSyncTime);
+	STORE_VAR("qvernote/lastupdatecount", LastUpdateCount);
+	STORE_VAR("qvernote/lastsynctime", LastSyncTime);
 	STORE_VAR("qvernote/online", WorkOnline);
 	STORE_VAR("qvernote/notesview", NotesView);
 	STORE_VAR("qvernote/notedisplayorder", NoteDisplayOrder);
