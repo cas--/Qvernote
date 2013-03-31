@@ -128,7 +128,7 @@ public:
 		//else
 		//	qDebug() << "Parse error" << errorHandler()->errorString();
 	}
-	void setNoteTitle(QString sTitle) { m_Note->title = sTitle.toStdString(); }
+	void setNoteTitle(QString sTitle) { m_Note->title = sTitle.simplified().toStdString(); }
 	//QString addMedia(QString sMimeType, const QByteArray& baMediaContent);
 	QString getEnmlDocument() { return ((QHtmlContentHandler*)contentHandler())->getEnml();/*writeDoctype(); return  m_sEnmlDocument;*/ }
 	Note* getNote() {

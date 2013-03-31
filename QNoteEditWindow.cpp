@@ -192,7 +192,7 @@ void QNoteEditWindow::saveNote()
 	else
 	{
 		// Allow changing title only in webclips
-		m_Note.title = QString(ui.leNoteTitle->text().toUtf8()).toStdString();
+		m_Note.title = QString(ui.leNoteTitle->text().toUtf8()).simplified().toStdString();
 	}
 
 	if(m_Note.title.empty())
