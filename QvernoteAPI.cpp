@@ -12,7 +12,6 @@
 #include <QDateTime>
 #include <transport/THttpClient.h>
 #include <transport/TSSLSocket.h>
-#include <transport/TSocket.h>
 #include <protocol/TBinaryProtocol.h>
 #include <Thrift.h>
 #include <boost/shared_ptr.hpp>
@@ -117,9 +116,7 @@ bool QvernoteAPI::initUserStore() {
 		}
 		else {
 			// use http
-			shared_ptr<TSocket> socket(new TSocket(EVERNOTE_HOST, 80));
-			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(socket));
-			userStoreHttpClient = shared_ptr<THttpClient>(new THttpClient(bufferedTransport, EVERNOTE_HOST, EDAM_USER_STORE_PATH));
+			userStoreHttpClient= shared_ptr<THttpClient>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
 		}
 		userStoreHttpClient->open();
 		shared_ptr<TProtocol> iprot(new TBinaryProtocol(userStoreHttpClient));
@@ -149,18 +146,16 @@ bool QvernoteAPI::initNoteStore() {
 		{
 			qDebug() << "attempting ssl connection";
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-			//QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
-			//qDebug() << "userstore dir:" << pgmDir;
-			//sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
-			//sslSocketFactory->authenticate(true);
+			QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
+			qDebug() << "userstore dir:" << pgmDir;
+			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
+			sslSocketFactory->authenticate(true);
 			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, noteStorePath));
 		}
 		else {
-			shared_ptr<TSocket> socket(new TSocket(EVERNOTE_HOST, 80));
-			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(socket));
-			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, noteStorePath));
+			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, noteStorePath));
 		}
 
 		noteStoreHttpClient->open();
@@ -1071,15 +1066,15 @@ bool QvernoteAPI::getSyncState(SyncState& syncState)
 		reinitNoteStore();
 		m_NoteStoreClient->getSyncState(syncState, getAuthenticationToken());
 	} catch(EDAMUserException& e) {
-		qDebug() << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
+		qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
 		setError(e.parameter, e.errorCode);
 		return false;
 	} catch(EDAMSystemException& se) {
-		qDebug() << __FUNCTION__ << se.message.c_str();
+		qDebug() << se.message.c_str();
 		setError(se.message, se.errorCode);
 		return false;
 	} catch(TTransportException& te) {
-		qDebug() << __FUNCTION__ << te.what();
+		qDebug() << te.what();
 		setError(te.what(), te.getType());
 		return false;
 	}
