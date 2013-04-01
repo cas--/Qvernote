@@ -41,7 +41,7 @@ QvernoteView::QvernoteView(QWidget *parent)
 	}
 	else
 	{
-		displayInformationBox(trUtf8("Initializing note store. It may take a couple of minutes on first sync. Please wait..."));
+		displayInformationBox(trUtf8("Loading Notes. Please wait, may take time..."));
 	}
 
 	QObject::connect(ui.lvNotebookList, SIGNAL(itemClicked(QListWidgetItem *)),  this, SLOT(loadNotebook(QListWidgetItem* )));
