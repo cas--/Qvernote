@@ -21,6 +21,8 @@ public:
 public slots:
 	void onSaveSettingsClick();
 	void onDropDBClick();
+	void onRevokeAuthClick();
+	void onRequestAuthClick();
 	void deleteThumbnails();
 	void selectBlacklistedNotebooks();
 	void onBlacklistedNotebookSelected(bool, QString, QString);
@@ -41,7 +43,6 @@ signals:
 private:
 	void configureSslProtocol(bool);
 	void configureOnlineMode(bool);
-	void configureAccount();
 	void configureOrientation(QvernoteSettings::DisplayOrientation);
 
 private:
@@ -53,6 +54,8 @@ private:
 	QMaemo5ListPickSelector *maxNoteCountSelector;
     QMaemo5ListPickSelector	*mapsProviderSelector;
 
+    QPushButton pbRevokeAuth;
+    QPushButton pbRequestAuth;
     QPushButton pbBlacklistedNotebooks;
     QPushButton	pbDeleteThumbs;
     QPushButton	pbDropDB;

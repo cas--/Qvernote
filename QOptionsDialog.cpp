@@ -18,11 +18,21 @@ QOptionsDialog::QOptionsDialog(QWidget *parent)
 	ui.setupUi(this);
 	QvernoteSettings* settings = QvernoteSettings::Instance();
 	QList<QString> listValues;
+	QvernoteAPI* h = QvernoteAPI::Instance();
 
-	//ui.leUsername->setInputMethodHints(Qt::ImhPreferLowercase|Qt::ImhNoAutoUppercase);
-	//ui.lePassword->setInputMethodHints(Qt::ImhPreferLowercase|Qt::ImhNoAutoUppercase|Qt::ImhHiddenText);
-	//ui.leUsername->setText(settings->getUsername());
-	//ui.lePassword->setText(settings->getPassword());
+	if(h->checkAuthenticateToken())
+	{
+	pbRevokeAuth.setText(trUtf8("Revoke Authentication"));
+	QObject::connect(&pbRevokeAuth, SIGNAL(clicked()), this, SLOT(onRevokeAuthClick()));
+	ui.gridLayout_2->addWidget(&pbRevokeAuth, 1, 0, 1, 2);
+	}
+	else
+	{
+	pbRequestAuth.setText(trUtf8("Request Authentication"));
+	QObject::connect(&pbRequestAuth, SIGNAL(clicked()), this, SLOT(onRequestAuthClick()));
+	ui.gridLayout_2->addWidget(&pbRequestAuth, 1, 0, 1, 2);
+	}
+
 
 
 	QStandardItemModel* onlineSelectionModel = new QStandardItemModel(0, 1);
@@ -191,6 +201,22 @@ void QOptionsDialog::onSaveSettingsClick()
 	watcher.setFuture(future);
 }
 
+void QOptionsDialog::onRevokeAuthClick()
+{
+	// warning this will revoke Qvernote's authorization with Evernote
+	//
+	// api->UserStore.revokeLongSession(authenticationToken)
+	//
+}
+
+void QOptionsDialog::onRequestAuthClick()
+{
+	// warning this will revoke Qvernote's authorization with Evernote
+	//
+	// api->UserStore.revokeLongSession(authenticationToken)
+	//
+}
+
 void QOptionsDialog::onDropDBClick()
 {
 	extern void dropDBCallback(QOptionsDialog* dlg);
@@ -247,12 +273,6 @@ void QOptionsDialog::saveSettings()
 		configureOrientation(settings->getDisplayOrientation());
 	}
 
-	//if(ui.leUsername->text() != settings->getUsername() || ui.lePassword->text() != settings->getPassword())
-	//{
-	//	settings->setUsername(ui.leUsername->text());
-	//	settings->setPassword(ui.lePassword->text());
-	//	configureAccount();
-	//}
 
 	if(protocolSelector->currentIndex() != settings->getUseSsl())
 	{
@@ -305,25 +325,6 @@ void QOptionsDialog::configureOnlineMode(bool checked)
 		if(h->isOnline())
 			//dynamic_cast<QvernoteView*>(parentWidget())->initView();
 			emit triggerInitView();
-	}
-}
-
-void QOptionsDialog::configureAccount()
-{
-	QvernoteAPI* h = QvernoteAPI::Instance();
-
-	if(h->checkAuthenticateToken())
-	{
-		if(h->initNoteStore() == true)
-		{
-			//dynamic_cast<QvernoteView*>(parentWidget())->reloadNotebookList();
-			emit triggerReloadNotebookList();
-		}
-	}
-	else
-	{
-		//dynamic_cast<QvernoteView*>(parentWidget())->displayError(trUtf8("Login error"), QString::fromStdString(h->getLastErrorString()));
-		emit triggerDisplayError(trUtf8("Login error"), QString::fromStdString(h->getLastErrorString()));
 	}
 }
 
