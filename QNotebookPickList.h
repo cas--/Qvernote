@@ -97,8 +97,8 @@ public:
 			}
 		}
 
-		// Add "All notebooks" button in case of currentNotebookName == "All Notebooks"
-		if(m_sCurrentNotebookName == trUtf8("All Notebooks"))
+		// Add "All Notes" button in case of currentNotebookName == "All Notes"
+		if(m_sCurrentNotebookName == trUtf8("All Notes"))
 		{
 			notebookButton = new QNotebookButton(m_sCurrentNotebookName, "", this);
 

@@ -105,7 +105,7 @@ void QvernoteView::loadNotebookList(QString notebookFilter)
 
 	/* Add special "ALL" notebook */
 	Notebook specialAllNotebook;
-	specialAllNotebook.name = "All notebooks";
+	specialAllNotebook.name = "All Notes";
 	QListWidgetItem* iw = new QListWidgetItem(ui.lvNotebookList);
 	iw->setSizeHint(QSize(0, 70));
 	ui.lvNotebookList->setItemWidget(iw,
@@ -127,7 +127,7 @@ void QvernoteView::loadNotebookList(QString notebookFilter)
 void QvernoteView::loadNotebook(QListWidgetItem* p_notebookListItem)
 {
 	QNotebookListItemWidget* p = (QNotebookListItemWidget*)p_notebookListItem->listWidget()->itemWidget(p_notebookListItem);
-	qDebug() << trUtf8("Loading notebook ") << p->getNotebook().name.c_str();
+	qDebug() << trUtf8("Loading Notebook ") << p->getNotebook().name.c_str();
 
 	m_pNotesView = shared_ptr<QNotesView>(new QNotesView(p->getNotebook(), this));
 	m_pNotesView->show();

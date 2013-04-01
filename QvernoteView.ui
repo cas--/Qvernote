@@ -54,7 +54,7 @@
         <item row="1" column="0">
          <widget class="QPushButton" name="pbNewNotebook">
           <property name="text">
-           <string>New notebook</string>
+           <string>New Notebook</string>
           </property>
           <property name="icon">
            <iconset resource="Resources/Icons.qrc">
@@ -166,7 +166,7 @@
   </action>
   <action name="actionDelete">
    <property name="text">
-    <string>Delete notebooks</string>
+    <string>Delete Notebooks</string>
    </property>
   </action>
   <action name="actionManage_tags">

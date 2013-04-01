@@ -49,7 +49,7 @@ void QNoteSearchDialog::openTagSelectionDialog()
 
 void QNoteSearchDialog::openNotebookSelectionDialog()
 {
-	QNotebookPickList dlg(trUtf8("All Notebooks"), this);
+	QNotebookPickList dlg(trUtf8("All Notes"), this);
 	dlg.loadNotebooks();
 	if(dlg.exec() == QDialog::Rejected)
 		return;
