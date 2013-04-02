@@ -296,7 +296,7 @@ void QOptionsDialog::configureSslProtocol(bool checked)
 {
 	QvernoteAPI* h = QvernoteAPI::Instance();
 
-	if(h->reinitNoteStore() == false)
+	if(h->reInitNoteStore() == false)
 	{
 		//dynamic_cast<QvernoteView*>(parentWidget())->displayError(trUtf8("Failed to configure SSL"), QString::fromStdString(h->getLastErrorString()));
 		emit triggerDisplayError(trUtf8("Failed to configure SSL"), QString::fromStdString(h->getLastErrorString()));

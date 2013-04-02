@@ -102,7 +102,7 @@ public:
 	bool initUserStore();
 	void reInitUserStore();
 	bool initNoteStore();
-	bool reinitNoteStore();
+	bool reInitNoteStore();
 
 	void initLocalStore();
 

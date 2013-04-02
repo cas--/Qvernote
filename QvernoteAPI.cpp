@@ -63,7 +63,7 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 			if(checkVersion() == true) {
 				if(checkAuthenticateToken())
 				{
-					reinitNoteStore();
+					reInitNoteStore();
 				}
 				else
 				{
@@ -105,10 +105,10 @@ bool QvernoteAPI::initUserStore() {
 		if(settings->getUseSsl() == true)
 		{
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-			QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
-			qDebug() << "userstore dir:" << pgmDir;
-			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
-			sslSocketFactory->authenticate(false);
+			//QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
+			//qDebug() << "userstore dir:" << pgmDir;
+			//sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
+			//sslSocketFactory->authenticate(false);
 
 			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
@@ -119,10 +119,10 @@ bool QvernoteAPI::initUserStore() {
 			userStoreHttpClient= shared_ptr<THttpClient>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
 		}
 		userStoreHttpClient->open();
-		shared_ptr<TProtocol> iprot(new TBinaryProtocol(userStoreHttpClient));
-		m_UserStoreClient = shared_ptr<UserStoreClient>(new UserStoreClient(iprot));
+		shared_ptr<TProtocol> clientStoreProtocol(new TBinaryProtocol(userStoreHttpClient));
+		m_UserStoreClient = shared_ptr<UserStoreClient>(new UserStoreClient(clientStoreProtocol));
 	} catch(TTransportException& e) {
-		qDebug() << e.what();
+		qDebug()  << __FUNCTION__ << e.what();
 		setError(e.what(), e.getType());
 		return false;
 	}
@@ -147,10 +147,10 @@ bool QvernoteAPI::initNoteStore() {
 		{
 			qDebug() << "attempting ssl connection";
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-			QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
-			qDebug() << "userstore dir:" << pgmDir;
-			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
-			sslSocketFactory->authenticate(true);
+			//QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
+			//qDebug() << "userstore dir:" << pgmDir;
+			//sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
+			//sslSocketFactory->authenticate(true);
 			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, noteStorePath));
@@ -172,7 +172,7 @@ bool QvernoteAPI::initNoteStore() {
 	return true;
 }
 
-bool QvernoteAPI::reinitNoteStore() {
+bool QvernoteAPI::reInitNoteStore() {
 	//m_NotebookList.clear();
 
 	if(!isOnline())
@@ -224,7 +224,7 @@ bool QvernoteAPI::Authenticate() {
 	try {
 		reInitUserStore();
 	} catch(EDAMUserException& e) {
-		qDebug() << e.parameter.c_str();
+		qDebug() << __FUNCTION__ << e.parameter.c_str();
 		setError(e.parameter, e.errorCode);
 		return false;
 	} catch(TTransportException& te) {
@@ -243,11 +243,8 @@ qint64 QvernoteAPI::refreshAuthentication()
 	qDebug() << __FUNCTION__ << "Re-auth started";
 	try {
 		reInitUserStore();
-		m_UserStoreClient->refreshAuthentication(
-				*m_AuthenticationResult,
-				getAuthenticationToken());
 	} catch(EDAMUserException& e) {
-		qDebug() << e.parameter.c_str();
+		qDebug() << __FUNCTION__ << e.parameter.c_str();
 		setError(e.parameter, e.errorCode);
 		return 60000;
 	} catch(EDAMSystemException& se) {
@@ -286,7 +283,7 @@ bool	QvernoteAPI::loadNotes(int maxNotes, const Notebook& notebook) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->findNotes(m_NoteList, getAuthenticationToken(), filter, 0, maxNotes);
 		} catch(EDAMUserException& e) {
 			qDebug() << __FUNCTION__  << e.what();
@@ -317,7 +314,7 @@ bool	QvernoteAPI::getNote(Note& note)
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->getNote(note, getAuthenticationToken(), note.guid, true, true, true, true);
 		} catch(EDAMUserException& e) {
 			setError(e.parameter, e.errorCode);
@@ -361,9 +358,9 @@ bool	QvernoteAPI::getFirstNote(Note& note) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->getNote(/*note*/(*m_NoteIterator), getAuthenticationToken(), (*m_NoteIterator).guid, false, false, false, false);
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->getNoteTagNames(/*note.tagNames*/(*m_NoteIterator).tagNames, getAuthenticationToken(), (*m_NoteIterator).guid);
 		} catch(EDAMUserException& e) {
 			setError(e.parameter, e.errorCode);
@@ -396,9 +393,9 @@ bool	QvernoteAPI::getNextNote(Note& note) {
 		else
 		{
 			try {
-				reinitNoteStore();
+				reInitNoteStore();
 				m_NoteStoreClient->getNote(/*note*/(*m_NoteIterator), getAuthenticationToken(), (*m_NoteIterator).guid, false, false, false, false);
-				reinitNoteStore();
+				reInitNoteStore();
 				m_NoteStoreClient->getNoteTagNames(/*note.tagNames*/(*m_NoteIterator).tagNames, getAuthenticationToken(), (*m_NoteIterator).guid);
 			} catch(EDAMUserException& e) {
 				setError(e.parameter, e.errorCode);
@@ -435,10 +432,10 @@ bool	QvernoteAPI::createNewNote(Note& newNote) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->createNote(createdNote, getAuthenticationToken(), newNote);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug() << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return false;
 		} catch(EDAMNotFoundException& ne) {
@@ -475,10 +472,10 @@ bool 	QvernoteAPI::updateExistingNote(Note& existingNote) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->updateNote(updatedNote, getAuthenticationToken(), existingNote);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return false;
 		} catch(EDAMNotFoundException& ne) {
@@ -506,10 +503,10 @@ bool	QvernoteAPI::deleteNote(Guid noteGuid) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->deleteNote(getAuthenticationToken(), noteGuid);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return false;
 		} catch(EDAMNotFoundException& ne) {
@@ -533,10 +530,10 @@ bool 	QvernoteAPI::searchNotes(const NoteFilter& filter, int maxResults) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->findNotes(m_NoteList, getAuthenticationToken(), filter, 0, maxResults);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.what();
+			qDebug()  << __FUNCTION__ << e.what();
 			setError(e.parameter, e.errorCode);
 			return false;
 		}
@@ -559,10 +556,10 @@ bool	QvernoteAPI::expungeNote(const Guid noteGuid) {
 	m_LocalStoreClient->expungeNote(noteGuid);
 
 	try {
-		reinitNoteStore();
+		reInitNoteStore();
 		m_NoteStoreClient->expungeNote(getAuthenticationToken(), noteGuid);
 	} catch(EDAMUserException& e) {
-		qDebug() << e.what();
+		qDebug()  << __FUNCTION__ << e.what();
 		setError(e.parameter, e.errorCode);
 		return false;
 	}
@@ -582,10 +579,10 @@ bool 	QvernoteAPI::copyNote(Guid noteGuid, Guid toNotebookGuid) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->copyNote(copiedNote, getAuthenticationToken(), noteGuid, toNotebookGuid);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.what();
+			qDebug()  << __FUNCTION__ << e.what();
 			setError(e.parameter, e.errorCode);
 			return false;
 		} catch(EDAMNotFoundException& nfe) {
@@ -635,10 +632,10 @@ bool	QvernoteAPI::loadResource(Resource& loadedResource, Guid resourceGuid)
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->getResource(loadedResource, getAuthenticationToken(), resourceGuid, true, true, true, true);
 		} catch (EDAMUserException& e) {
-			qDebug() << e.what();
+			qDebug()  << __FUNCTION__ << e.what();
 			setError(e.parameter, e.errorCode);
 			return false;
 		} catch (EDAMNotFoundException& ne) {
@@ -660,13 +657,13 @@ bool	QvernoteAPI::loadResourceByHash(Resource& loadedResource, Guid noteGuid, QS
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			QByteArray mediaHash = QByteArray::fromHex(hexContentHash.toAscii());
 			string initialBodyHashString((const char*)mediaHash, mediaHash.size());
 			string finalBodyHashString = string(initialBodyHashString.begin(), initialBodyHashString.begin() + mediaHash.size());
 			m_NoteStoreClient->getResourceByHash(loadedResource, getAuthenticationToken(), noteGuid, finalBodyHashString, true, false, false);
 		} catch (EDAMUserException& e) {
-			qDebug() << e.what();
+			qDebug()  << __FUNCTION__ << e.what();
 			setError(e.parameter, e.errorCode);
 			return false;
 		} catch (EDAMNotFoundException& ne) {
@@ -711,9 +708,9 @@ bool QvernoteAPI::loadNotebookList() {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->listNotebooks(m_NotebookList, getAuthenticationToken());
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->findNoteCounts(m_NoteCounts, getAuthenticationToken(), filter, true);
 
 		} catch(EDAMUserException& e) {
@@ -771,7 +768,7 @@ bool QvernoteAPI::getFirstNotebook(Notebook& notebook) {
 		else
 		{
 			try {
-				reinitNoteStore();
+				reInitNoteStore();
 				m_NoteStoreClient->listTagsByNotebook(m_TagsPerNotebook[notebook.name], getAuthenticationToken(), notebook.guid);
 			} catch(EDAMUserException& e) {
 				setError(e.parameter, e.errorCode);
@@ -797,7 +794,7 @@ bool QvernoteAPI::getNextNotebook(Notebook& notebook) {
 			else
 			{
 				try {
-					reinitNoteStore();
+					reInitNoteStore();
 					m_NoteStoreClient->listTagsByNotebook(m_TagsPerNotebook[notebook.name], getAuthenticationToken(), notebook.guid);
 				} catch(EDAMUserException& e) {
 					setError(e.parameter, e.errorCode);
@@ -831,10 +828,10 @@ bool QvernoteAPI::createNewNotebook(const string& notebookName, bool isDefault, 
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->createNotebook(result, getAuthenticationToken(), newNotebook);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return false;
 		}
@@ -855,10 +852,10 @@ bool QvernoteAPI::deleteNotebook(Notebook& notebook) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->expungeNotebook(getAuthenticationToken(), notebook.guid);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return false;
 		}
@@ -919,11 +916,11 @@ bool QvernoteAPI::addNewTag(const string& newTagName, Tag& result) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->createTag(result, getAuthenticationToken(), newTag);
 			m_TagList.push_back(result);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return false;
 		}
@@ -945,10 +942,10 @@ int QvernoteAPI::updateTag(Tag& updatedTag) {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			newUSN = m_NoteStoreClient->updateTag(getAuthenticationToken(), updatedTag);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return 0;
 		}
@@ -966,10 +963,10 @@ bool QvernoteAPI::loadTagList() {
 	else
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->listTags(m_TagList, getAuthenticationToken());
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			return false;
 		}
@@ -1042,10 +1039,10 @@ bool QvernoteAPI::emailNote(Note& note, string emailAddress) {
 	p.__isset.guid = true;
 	p.__isset.toAddresses = true;
 	try {
-		reinitNoteStore();
+		reInitNoteStore();
 		m_NoteStoreClient->emailNote(getAuthenticationToken(), p);
 	} catch (EDAMUserException& e) {
-		qDebug() << e.what();
+		qDebug()  << __FUNCTION__ << e.what();
 		setError(e.parameter, e.errorCode);
 		return false;
 	} catch (EDAMNotFoundException& ne) {
@@ -1064,10 +1061,10 @@ bool QvernoteAPI::emailNote(Note& note, string emailAddress) {
 bool QvernoteAPI::getSyncState(SyncState& syncState)
 {
 	try {
-		reinitNoteStore();
+		reInitNoteStore();
 		m_NoteStoreClient->getSyncState(syncState, getAuthenticationToken());
 	} catch(EDAMUserException& e) {
-		qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+		qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 		setError(e.parameter, e.errorCode);
 		return false;
 	} catch(EDAMSystemException& se) {
@@ -1086,10 +1083,10 @@ bool QvernoteAPI::getSyncState(SyncState& syncState)
 bool QvernoteAPI::getSyncChunk(SyncChunk& syncChunk, int afterUSN, int maxEntries, bool isFullSync)
 {
 	try {
-		reinitNoteStore();
+		reInitNoteStore();
 		m_NoteStoreClient->getSyncChunk(syncChunk, getAuthenticationToken(), afterUSN, maxEntries, isFullSync);
 	} catch(EDAMUserException& e) {
-		qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+		qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 		setError(e.parameter, e.errorCode);
 		return false;
 	} catch(EDAMSystemException& se) {
@@ -1270,7 +1267,7 @@ bool QvernoteAPI::updateNotes(SyncChunk& syncChunk)
 		emit progressUpdated(QString::fromUtf8((*i).title.c_str()));
 
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->getNote((*i), getAuthenticationToken(), (*i).guid, true, true, true, true);
 		} catch(EDAMUserException& e) {
 			setError(e.parameter, e.errorCode);
@@ -1342,10 +1339,10 @@ bool QvernoteAPI::updateResources(SyncChunk& syncChunk)
 		else
 			emit progressUpdated(QString("Resource: ") + QString::fromUtf8((*i).attributes.fileName.c_str()));
 		/*try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->getResource(*i, getAuthenticationToken(), (*i).guid, true, true, true, true);
 		} catch (EDAMUserException& e) {
-			qDebug() << e.what();
+			qDebug()  << __FUNCTION__ << e.what();
 			setError(e.parameter, e.errorCode);
 			continue;
 		} catch (EDAMNotFoundException& ne) {
@@ -1369,10 +1366,10 @@ bool QvernoteAPI::sendDirtyTags()
 	for(QVector<Tag>::iterator i = taglist.begin(); i != taglist.end(); i++)
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->createTag((*i), getAuthenticationToken(), (*i));
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		}
@@ -1388,10 +1385,10 @@ bool QvernoteAPI::sendDirtyTags()
 	for(QVector<Tag>::iterator i = taglist.begin(); i != taglist.end(); i++)
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			newUSN = m_NoteStoreClient->updateTag(getAuthenticationToken(), *i);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		} catch(EDAMNotFoundException& ne) {
@@ -1424,10 +1421,10 @@ bool QvernoteAPI::sendDirtyNotebooks()
 	for(QVector<Notebook>::iterator i = notebooklist.begin(); i != notebooklist.end(); i++)
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->createNotebook(*i, getAuthenticationToken(), *i);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		}
@@ -1442,10 +1439,10 @@ bool QvernoteAPI::sendDirtyNotebooks()
 	for(QVector<Notebook>::iterator i = notebooklist.begin(); i != notebooklist.end(); i++)
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			newUSN = m_NoteStoreClient->updateNotebook(getAuthenticationToken(), *i);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		} catch(EDAMNotFoundException& ne) {
@@ -1467,10 +1464,10 @@ bool QvernoteAPI::sendDirtyNotebooks()
 		QNotebook::remove(m_LocalStoreClient->getDB(), (*i).guid);
 
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->expungeNotebook(getAuthenticationToken(), (*i).guid);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		} catch(EDAMNotFoundException& ne) {
@@ -1497,10 +1494,10 @@ bool QvernoteAPI::sendDirtyNotes()
 		QNote::loadResourceData(m_LocalStoreClient->getDB(), *i);
 
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->createNote(*i, getAuthenticationToken(), *i);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		} catch(EDAMNotFoundException& ne) {
@@ -1519,10 +1516,10 @@ bool QvernoteAPI::sendDirtyNotes()
 	for(QVector<Note>::iterator i = notelist.begin(); i != notelist.end(); i++)
 	{
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->updateNote(*i, getAuthenticationToken(), *i);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		} catch(EDAMNotFoundException& ne) {
@@ -1543,10 +1540,10 @@ bool QvernoteAPI::sendDirtyNotes()
 	{
 		QNote::addToTrash(m_LocalStoreClient->getDB(), (*i).guid);
 		try {
-			reinitNoteStore();
+			reInitNoteStore();
 			m_NoteStoreClient->deleteNote(getAuthenticationToken(), (*i).guid);
 		} catch(EDAMUserException& e) {
-			qDebug() << e.errorCode << QString(((string)e.parameter).c_str());
+			qDebug()  << __FUNCTION__ << e.errorCode << QString(((string)e.parameter).c_str());
 			setError(e.parameter, e.errorCode);
 			continue;
 		} catch(EDAMNotFoundException& ne) {
