@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="Resources/Icons.qrc">:/IconAdd/Evernote-64.png</pixmap>
+      <pixmap resource="Resources/Icons.qrc">:/IconAdd/qvernote-64.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>false</bool>
