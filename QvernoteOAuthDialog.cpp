@@ -1,5 +1,6 @@
 /*********************************************************************************
-NixNote - An open-source client for the Evernote service.
+
+Based upon Nixnote oauthwindow code by:
 Copyright (C) 2013 Randy Baumgarte
 
 This program is free software; you can redistribute it and/or
@@ -17,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ***********************************************************************************/
 
-#include "oauthwindow.h"
+#include "QvernoteOAuthDialog.h"
 
 #include <stdio.h>
 #include <sys/timeb.h>
@@ -32,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "QvernoteAPI.h"
 
 
-OAuthWindow::OAuthWindow(QWidget *parent) :
+QvernoteOAuthDialog::QvernoteOAuthDialog(QWidget *parent) :
     QDialog(parent)
 {
     struct timeb tmb;
@@ -47,7 +48,7 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
     credUrlBase = urlBase +
             "/oauth?oauth_consumer_key=" + QString(EDAM_CONSUMER_KEY) +
             "&oauth_signature=" + QString(EDAM_CONSUMER_SECRET) +
-            "%26&oauth_signature_method=PLAINTEXT&oauth_timestamp=" + QString::number(time) +
+            "&oauth_signature_method=PLAINTEXT&oauth_timestamp=" + QString::number(time) +
             "&oauth_nonce=" + QString::number(millis);
     temporaryCredUrl = credUrlBase + "&oauth_callback=nnoauth";
     permanentCredUrl = credUrlBase + "&oauth_token=";
@@ -97,8 +98,8 @@ OAuthWindow::OAuthWindow(QWidget *parent) :
 }
 
 
-void OAuthWindow::tempAuthPageLoaded(bool rc) {
-    qDebug() << "Temporary credentials received from Evernote";
+void QvernoteOAuthDialog::tempAuthPageLoaded(bool rc) {
+    qDebug() << __FUNCTION__ << "Temporary credentials received from Evernote";
     if (!rc) {
         errorMessage = tr("Error receiving temporary credentials");
         error = true;
@@ -125,8 +126,8 @@ void OAuthWindow::tempAuthPageLoaded(bool rc) {
 }
 
 
-void OAuthWindow::tempAuthPageReply(QNetworkReply* reply) {
-    qDebug() << "error: " << reply->error();
+void QvernoteOAuthDialog::tempAuthPageReply(QNetworkReply* reply) {
+    qDebug() << __FUNCTION__ << "error: " << reply->error();
     if (reply->error() != QNetworkReply::NoError) {
         int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 //        qDebug() << "status:" << statusCode;
@@ -136,7 +137,7 @@ void OAuthWindow::tempAuthPageReply(QNetworkReply* reply) {
 }
 
 
-void OAuthWindow::permanentCredentialsReceived(bool rc) {
+void QvernoteOAuthDialog::permanentCredentialsReceived(bool rc) {
     if (authTokenReceived)
         return;
     QWebFrame *mainFrame;
@@ -171,10 +172,10 @@ void OAuthWindow::permanentCredentialsReceived(bool rc) {
 }
 
 
-void OAuthWindow::userLoginReply(QNetworkReply *reply) {
+void QvernoteOAuthDialog::userLoginReply(QNetworkReply* reply) {
     if (userLoginPageLoaded)
         return;
-    qDebug() << "Authentication reply received from Evernote";
+    qDebug() << __FUNCTION__ << "Authentication reply received from Evernote";
     qDebug() << "error: " << reply->error();
     QString searchReq = "?oauth_token=";
     qDebug() << "Reply:" << reply->url().toString();
@@ -204,10 +205,9 @@ void OAuthWindow::userLoginReply(QNetworkReply *reply) {
 }
 
 
-void OAuthWindow::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
-    //qDebug() << "---frmBuyIt::sslErrorHandler: ";
-    // show list of all ssl errors
-    //foreach (QSslError err, errlist)
-    //    qDebug() << "ssl error: " << err;
-    qnr->ignoreSslErrors();
+void QvernoteOAuthDialog::sslErrorHandler(QNetworkReply* reply) {
+    if(QvernoteSettings::Instance()->getUseSsl() == false)
+    {
+        reply->ignoreSslErrors();
+    }
 }

@@ -1,5 +1,6 @@
 /*********************************************************************************
-NixNote - An open-source client for the Evernote service.
+
+Based upon Nixnote oauthwindow code by:
 Copyright (C) 2013 Randy Baumgarte
 
 This program is free software; you can redistribute it and/or
@@ -17,15 +18,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ***********************************************************************************/
 
-#ifndef OAUTHWINDOW_H
-#define OAUTHWINDOW_H
+#ifndef QVERNOTEOAUTHDIALOG_H
+#define QVERNOTEOAUTHDIALOG_H
 
 #include <QDialog>
 #include <QWebView>
 #include <QGridLayout>
 #include <QNetworkRequest>
 
-class OAuthWindow : public QDialog
+class QvernoteOAuthDialog : public QDialog
 {
     Q_OBJECT
 private:
@@ -43,7 +44,7 @@ private:
     bool userLoginPageLoaded;
 
 public:
-    explicit OAuthWindow(QWidget *parent = 0);
+    explicit QvernoteOAuthDialog(QWidget *parent = 0);
     QString response;
     bool error;
     QString errorMessage;
@@ -57,9 +58,9 @@ public slots:
     void permanentCredentialsReceived(bool rc);
     void userLoginReply(QNetworkReply *reply);
     void tempAuthPageReply(QNetworkReply *reply);
-    void sslErrorHandler(QNetworkReply *qnr, const QList<QSslError>& errlist);
+    void sslErrorHandler(QNetworkReply *reply, const QList<QSslError>& errlist);
 
 
 };
 
-#endif // OAUTHWINDOW_H
+#endif // QVERNOTEOAUTHDIALOG_H

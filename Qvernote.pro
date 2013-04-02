@@ -97,7 +97,7 @@ HEADERS += QAudioPreviewDialog.h \
     QvernoteSettings.h \
     QvernoteView.h \
     oauth/oauthtokenizer.h \
-    oauth/oauthwindow.h
+    QvernoteOAuthDialog.h
 SOURCES += DataTypes/QFavorite.cpp \
     DataTypes/QNoteThumbnail.cpp \
     QSyncProgressDialog.cpp \
@@ -138,7 +138,7 @@ SOURCES += DataTypes/QFavorite.cpp \
     QvernoteView.cpp \
     Qvernote.cpp \
     oauth/oauthtokenizer.cpp \
-    oauth/oauthwindow.cpp
+    QvernoteOAuthDialog.cpp
 FORMS += QOptionsDialog.ui \
     QSyncProgressDialog.ui \
     QEmailNoteDialog.ui \

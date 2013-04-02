@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QDialog>
 #include <QMessageBox>
-#include "oauth/oauthwindow.h"
+#include "QvernoteOAuthDialog.h"
 #include "oauth/oauthtokenizer.h"
 
 #ifdef Q_WS_MAEMO_5
@@ -64,20 +64,20 @@ void Qvernote::Init() {
 	qDebug() << "Init";
 
 	if(settings->getOAuthToken().length() == 0) {
-		OAuthWindow window;
-		if (window.exec() == QDialog::Rejected) {
+		QvernoteOAuthDialog oauth_dialog;
+		if (oauth_dialog.exec() == QDialog::Rejected) {
 			qDebug() << "Auth cancelled by user going offline";
 			settings->setWorkOnline(false);
 		}
 		else {
-			if (window.error or window.response == "") {
-				qDebug() << "Auth Error going offline: " << window.errorMessage;
+			if (oauth_dialog.error or oauth_dialog.response == "") {
+				qDebug() << "Auth Error going offline: " << oauth_dialog.errorMessage;
 				settings->setWorkOnline(false);
 			}
 			else
 			{
 				qDebug() << "auth token";
-				settings->setOAuthToken(window.response);
+				settings->setOAuthToken(oauth_dialog.response);
 			}
 		}
 		settings->Store();
