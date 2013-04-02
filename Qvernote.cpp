@@ -66,15 +66,21 @@ void Qvernote::Init() {
 
 	if(settings->getOAuthToken().length() == 0) {
 		OAuthWindow window;
-		window.exec();
-		if (window.error) {
-			qDebug() << "Error: " << window.errorMessage;
-			return;
+		if (window.exec() == QDialog::Rejected) {
+			qDebug() << "Auth cancelled by user going offline";
+			settings->setWorkOnline(false);
 		}
-		if (window.response == "")
-			return;
-
-		settings->setOAuthToken(window.response);
+		else {
+			if (window.error or window.response == "") {
+				qDebug() << "Auth Error going offline: " << window.errorMessage;
+				settings->setWorkOnline(false);
+			}
+			else
+			{
+				qDebug() << "auth token";
+				settings->setOAuthToken(window.response);
+			}
+		}
 		settings->Store();
 	}
 

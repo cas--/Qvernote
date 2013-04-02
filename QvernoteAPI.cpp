@@ -141,6 +141,8 @@ bool QvernoteAPI::initNoteStore() {
 
 	string noteStorePath = string(EDAM_NOTE_STORE_PATH) + string("/") + getShardId();
 	QvernoteSettings* settings = QvernoteSettings::Instance();
+	//reInitUserStore();
+	//m_UserStoreClient->getUser(user, getAuthenticationToken());
 
 	try {
 		if(settings->getUseSsl() == true)
@@ -161,7 +163,20 @@ bool QvernoteAPI::initNoteStore() {
 		noteStoreHttpClient->open();
 		shared_ptr<TProtocol> noteStoreProtocol(new TBinaryProtocol(noteStoreHttpClient));
 		m_NoteStoreClient = shared_ptr<NoteStoreClient>(new NoteStoreClient(noteStoreProtocol));
-		m_UserStoreClient->getUser(user, getAuthenticationToken());
+		try {
+			m_UserStoreClient->getUser(user, getAuthenticationToken());
+		} catch(...) {
+			// temp code
+			try {
+				reInitUserStore();
+				m_UserStoreClient->getUser(user, getAuthenticationToken());
+				qDebug() << "it worked!";
+			} catch (...) {
+				qDebug() << "resetting token!";
+				settings->setOAuthToken("");
+				settings->Store();
+			}
+		}
 	} catch(TTransportException& e) {
 		qDebug() << __FUNCTION__ << e.what();
 		setError(e.what(), e.getType());
