@@ -4,7 +4,6 @@
 #include "QNotebookListItemWidget.h"
 #include "QvernoteTypes.h"
 #include "QvernoteSettings.h"
-#include "qvernotelogindialog.h"
 #include "QNoteSearchDialog.h"
 #include "QDeleteNotebookView.h"
 #include "QAboutDialog.h"

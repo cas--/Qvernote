@@ -6,7 +6,6 @@
  */
 
 #include "Qvernote.h"
-#include "qvernotelogindialog.h"
 #include <QDebug>
 #include <QDialog>
 #include <QMessageBox>

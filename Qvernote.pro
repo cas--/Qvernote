@@ -96,7 +96,6 @@ HEADERS += QAudioPreviewDialog.h \
     QvernoteAPI.h \
     QvernoteSettings.h \
     QvernoteView.h \
-    qvernotelogindialog.h \
     oauth/oauthtokenizer.h \
     oauth/oauthwindow.h
 SOURCES += DataTypes/QFavorite.cpp \
@@ -137,7 +136,6 @@ SOURCES += DataTypes/QFavorite.cpp \
     QvernoteSettings.cpp \
     main.cpp \
     QvernoteView.cpp \
-    qvernotelogindialog.cpp \
     Qvernote.cpp \
     oauth/oauthtokenizer.cpp \
     oauth/oauthwindow.cpp
@@ -159,7 +157,6 @@ FORMS += QOptionsDialog.ui \
     QNoteEditWindow.ui \
     QNotesView.ui \
     QvernoteView.ui \
-    qvernotelogindialog.ui
 RESOURCES += Resources/Icons.qrc
 unix {
     # VARIABLES
