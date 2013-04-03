@@ -17,7 +17,7 @@
 #include <boost/shared_ptr.hpp>
 #include "QvernoteStorage.h"
 #include "QvernoteSettings.h"
-#include "oauth/oauthtokenizer.h"
+#include "oauthtokenizer.h"
 
 
 #include <inttypes.h>

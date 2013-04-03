@@ -10,7 +10,6 @@
 #include <QDialog>
 #include <QMessageBox>
 #include "QvernoteOAuthDialog.h"
-#include "oauth/oauthtokenizer.h"
 
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5InformationBox>

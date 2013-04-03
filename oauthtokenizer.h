@@ -1,5 +1,5 @@
 /*********************************************************************************
-NixNote - An open-source client for the Evernote service.
+
 Copyright (C) 2013 Randy Baumgarte
 
 This program is free software; you can redistribute it and/or
@@ -35,11 +35,11 @@ public:
     QString edam_webApiUrlPrefix;
     void tokenize(QString decoded);
 
-    
+
 signals:
-    
+
 public slots:
-    
+
 };
 
 #endif // OAUTHTOKENIZER_H
