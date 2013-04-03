@@ -9,7 +9,6 @@
 #include <QDebug>
 #include <QDialog>
 #include <QMessageBox>
-#include "QvernoteOAuthDialog.h"
 
 #ifdef Q_WS_MAEMO_5
 #include <QMaemo5InformationBox>
@@ -60,27 +59,7 @@ Qvernote::~Qvernote() {
 
 
 void Qvernote::Init() {
-	qDebug() << "Init";
-
-	if(settings->getOAuthToken().length() == 0) {
-		QvernoteOAuthDialog oauth_dialog;
-		if (oauth_dialog.exec() == QDialog::Rejected) {
-			qDebug() << "Auth cancelled by user going offline";
-			settings->setWorkOnline(false);
-		}
-		else {
-			if (oauth_dialog.error or oauth_dialog.response == "") {
-				qDebug() << "Auth Error going offline: " << oauth_dialog.errorMessage;
-				settings->setWorkOnline(false);
-			}
-			else
-			{
-				qDebug() << "auth token";
-				settings->setOAuthToken(oauth_dialog.response);
-			}
-		}
-		settings->Store();
-	}
+	qDebug() << __FUNCTION__;
 
 	if(settings->getWorkOnline() == false)
 	{

@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include "QNotebookPickList.h"
+#include "QvernoteOAuthDialog.h"
 
 static void populateListModel(QStandardItemModel *model, QList<QString>& listValues);
 
@@ -206,15 +207,29 @@ void QOptionsDialog::onRevokeAuthClick()
 	// warning this will revoke Qvernote's authorization with Evernote
 	//
 	// api->UserStore.revokeLongSession(authenticationToken)
-	//
+	settings->setOAuthToken("")
+	settings->setWorkOnline(false);
+	settings->Store();
+	configureOnlineMode(settings->getWorkOnline());
 }
 
 void QOptionsDialog::onRequestAuthClick()
 {
-	// warning this will revoke Qvernote's authorization with Evernote
-	//
-	// api->UserStore.revokeLongSession(authenticationToken)
-	//
+	QvernoteOAuthDialog oauth_dialog;
+	if (oauth_dialog.exec() == QDialog::Rejected) {
+		qDebug() << "Auth cancelled by user going offline";
+		settings->setWorkOnline(false);
+	} else {
+		if (oauth_dialog.error or oauth_dialog.response == "") {
+			qDebug() << "Auth Error going offline: " << oauth_dialog.errorMessage;
+			settings->setWorkOnline(false);
+		} else	{
+			qDebug() << "auth token";
+			settings->setOAuthToken(oauth_dialog.response);
+		}
+	}
+	settings->Store();
+	configureOnlineMode(settings->getWorkOnline());
 }
 
 void QOptionsDialog::onDropDBClick()
