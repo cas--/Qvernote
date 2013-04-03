@@ -20,7 +20,7 @@ void QAboutDialog::openContactMail()
 {
 #ifdef Q_WS_MAEMO_5
 	ModestInterface modestIf(ModestInterface::staticInterfaceName(), "/com/nokia/modest", QDBusConnection::sessionBus(), 0);
-	modestIf.ComposeMail("burbulator@gmail.com", "", "", "Evernote", "", "");
+	modestIf.ComposeMail("calumlind@gmail.com", "", "", "Qvernote", "", "");
 #endif
 	close();
 }
