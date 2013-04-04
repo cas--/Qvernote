@@ -1,3 +1,11 @@
+qvernote (0.6-1maemo1) stable; urgency=low
+
+  * Add Evernote OAuth support
+  * Fixed sync issue with trailing whitespace in note title
+  * Replace icons with non-infringing version
+
+ -- Calum Lind <calumlind@gmail.com>  Thu,  4 Apr 2013 13:04:23 -0400
+
 qvernote (0.5-5maemo1) stable; urgency=low
 
   * Fixed GPS position update crash
