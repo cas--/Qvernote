@@ -90,7 +90,7 @@ QvernoteOAuthDialog::QvernoteOAuthDialog(QWidget *parent) :
     QUrl tu(temporaryCredUrl);
     connect(&tempAuthPage, SIGNAL(loadFinished(bool)), this, SLOT(tempAuthPageLoaded(bool)));
     connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
-            const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+            const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*)));
     connect(tempAuthPage.page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(tempAuthPageReply(QNetworkReply*)));
 
     qDebug() << "Temporary URL:" << tu.toString();
@@ -119,7 +119,7 @@ void QvernoteOAuthDialog::tempAuthPageLoaded(bool rc) {
     qDebug() << "AccessUrl:" << accessUrl;
 
     connect(userLoginPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
-            const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+            const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*)));
     connect(userLoginPage.page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(userLoginReply(QNetworkReply*)));
     userLoginPage.load(accessUrl);
     grid.addWidget(&userLoginPage);
@@ -197,7 +197,7 @@ void QvernoteOAuthDialog::userLoginReply(QNetworkReply* reply) {
             qDebug() << "Token: " << token;
             connect(&authRequestPage, SIGNAL(loadFinished(bool)), this, SLOT(permanentCredentialsReceived(bool)));
             connect(authRequestPage.page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*,
-                    const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & )));
+                    const QList<QSslError> & )), this, SLOT(sslErrorHandler(QNetworkReply*)));
             authRequestPage.load(QUrl(permanentCredUrl + token));
             userLoginPageLoaded = true;
         }

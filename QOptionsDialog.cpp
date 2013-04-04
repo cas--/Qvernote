@@ -207,18 +207,27 @@ void QOptionsDialog::onRevokeAuthClick()
 	// warning this will revoke Qvernote's authorization with Evernote
 	//
 	// api->UserStore.revokeLongSession(authenticationToken)
-	settings->setOAuthToken("")
+	QvernoteSettings* settings = QvernoteSettings::Instance();
+	settings->setOAuthToken("");
 	settings->setWorkOnline(false);
 	settings->Store();
-	configureOnlineMode(settings->getWorkOnline());
+	saveSettings();
 }
 
 void QOptionsDialog::onRequestAuthClick()
 {
+	QvernoteSettings* settings = QvernoteSettings::Instance();
 	QvernoteOAuthDialog oauth_dialog;
 	if (oauth_dialog.exec() == QDialog::Rejected) {
-		qDebug() << "Auth cancelled by user going offline";
-		settings->setWorkOnline(false);
+		if (oauth_dialog.response == "") {
+			qDebug() << "Auth cancelled by user going offline";
+			settings->setWorkOnline(false);
+		} else {
+			// the dialog is sending rejected signal even when successful
+			qDebug() << "auth token";
+			settings->setOAuthToken(oauth_dialog.response);
+			settings->setWorkOnline(true);
+		}
 	} else {
 		if (oauth_dialog.error or oauth_dialog.response == "") {
 			qDebug() << "Auth Error going offline: " << oauth_dialog.errorMessage;
@@ -226,10 +235,11 @@ void QOptionsDialog::onRequestAuthClick()
 		} else	{
 			qDebug() << "auth token";
 			settings->setOAuthToken(oauth_dialog.response);
+			settings->setWorkOnline(true);
 		}
 	}
 	settings->Store();
-	configureOnlineMode(settings->getWorkOnline());
+	saveSettings();
 }
 
 void QOptionsDialog::onDropDBClick()
@@ -331,6 +341,8 @@ void QOptionsDialog::configureOnlineMode(bool checked)
 	{
 		//dynamic_cast<QvernoteView*>(parentWidget())->displayError(QString(trUtf8("Failed to go %1").arg((checked)? "online" : "offline")), QString::fromStdString(h->getLastErrorString()));
 		emit triggerDisplayError(QString(trUtf8("Failed to go %1").arg((checked)? trUtf8("online") : trUtf8("offline"))), QString::fromStdString(h->getLastErrorString()));
+		//vernoteSettings* settings = QvernoteSettings::Instance();
+		//settings->setWorkOnline(!checked);
 	}
 	else
 	{

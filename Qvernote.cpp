@@ -66,7 +66,7 @@ void Qvernote::Init() {
 		m_hEvernote->setOnline(false);
 	}
 
-	if(m_hEvernote->isOnline() and m_pQvernote->m_hEvernote->checkAuthenticateToken())
+	if(m_hEvernote->isOnline() and m_hEvernote->checkAuthenticateToken())
 	{
 		initThread = new InitThread(this);
 		initThread->start();

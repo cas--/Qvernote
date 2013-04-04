@@ -58,7 +58,7 @@ public slots:
     void permanentCredentialsReceived(bool rc);
     void userLoginReply(QNetworkReply *reply);
     void tempAuthPageReply(QNetworkReply *reply);
-    void sslErrorHandler(QNetworkReply *reply, const QList<QSslError>& errlist);
+    void sslErrorHandler(QNetworkReply *reply);
 
 
 };

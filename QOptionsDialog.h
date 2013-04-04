@@ -9,11 +9,11 @@
 
 class QOptionsDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    QOptionsDialog(QWidget *parent = 0);
-    ~QOptionsDialog();
+	QOptionsDialog(QWidget *parent = 0);
+	~QOptionsDialog();
 
 	void saveSettings();
 	void dropDB();
@@ -46,22 +46,22 @@ private:
 	void configureOrientation(QvernoteSettings::DisplayOrientation);
 
 private:
-    Ui::QOptionsDialogClass ui;
-    QMaemo5ListPickSelector *onlineSelector;
-    QMaemo5ListPickSelector *displayOrientationSelector;
-    QMaemo5ListPickSelector *protocolSelector;
-    QMaemo5ListPickSelector *notesViewSelector;
+	Ui::QOptionsDialogClass ui;
+	QMaemo5ListPickSelector *onlineSelector;
+	QMaemo5ListPickSelector *displayOrientationSelector;
+	QMaemo5ListPickSelector *protocolSelector;
+	QMaemo5ListPickSelector *notesViewSelector;
 	QMaemo5ListPickSelector *maxNoteCountSelector;
-    QMaemo5ListPickSelector	*mapsProviderSelector;
+	QMaemo5ListPickSelector	*mapsProviderSelector;
 
-    QPushButton pbRevokeAuth;
-    QPushButton pbRequestAuth;
-    QPushButton pbBlacklistedNotebooks;
-    QPushButton	pbDeleteThumbs;
-    QPushButton	pbDropDB;
-    QFutureWatcher<void> watcher;
-    QFuture<void> future;
-    QStringList	m_slBlacklistedNotebooks;
+	QPushButton pbRevokeAuth;
+	QPushButton pbRequestAuth;
+	QPushButton pbBlacklistedNotebooks;
+	QPushButton	pbDeleteThumbs;
+	QPushButton	pbDropDB;
+	QFutureWatcher<void> watcher;
+	QFuture<void> future;
+	QStringList	m_slBlacklistedNotebooks;
 };
 
 #endif // QOPTIONSDIALOG_H

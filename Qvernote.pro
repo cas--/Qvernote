@@ -156,7 +156,7 @@ FORMS += QOptionsDialog.ui \
     QNewNotebookDialog.ui \
     QNoteEditWindow.ui \
     QNotesView.ui \
-    QvernoteView.ui \
+    QvernoteView.ui
 RESOURCES += Resources/Icons.qrc
 unix {
     # VARIABLES
