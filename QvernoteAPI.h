@@ -106,15 +106,7 @@ public:
 
 	void initLocalStore();
 
-	bool checkVersion();
-	bool Authenticate();
-	bool checkAuthenticateToken() {
-		if (getAuthenticationToken() != "")
-			return true;
-
-		return false;
-	};
-	//bool refreshAuthentication();
+	bool checkAuthenticateToken() { return getAuthenticationToken().length() > 0; }
 
 	bool	loadNotes(int maxNotes, const Notebook& notebook);
 	bool	getNote(Note& note);

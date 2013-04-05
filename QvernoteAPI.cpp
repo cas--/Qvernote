@@ -54,46 +54,31 @@ QvernoteAPI::~QvernoteAPI() {
 }
 
 bool QvernoteAPI::setOnline(bool isOnline) {
-
-	if(isOnline)
-	{
+	if(isOnline) {
 		m_bIsOnline = initUserStore();
-		if(m_bIsOnline)
-		{
-			if(checkVersion() == true) {
-				if(checkAuthenticateToken())
-				{
-					reInitNoteStore();
-				}
-				else
-				{
-					return false;
-				}
+		if(m_bIsOnline) {
+			if(checkAuthenticateToken()) {
+				reInitNoteStore();
+			} else {
+				// set offline?
+				return false;
 			}
 			qDebug() << "Starting threads";
-
 			authThread->setTerminate(false);
 			syncThread->setTerminate(false);
 			if(!authThread->isRunning())
 				authThread->start();
-
 			if(!syncThread->isRunning())
 				syncThread->start();
-		}
-		else
-		{
+		} else {
 			qDebug() << "Failed to go online";
 			return false;
 		}
-	}
-	else
-	{
+	} else {
 		qDebug() << "Terminating threads";
-
 		authThread->setTerminate(true);
 		syncThread->setTerminate(true);
 	}
-
 	m_bIsOnline = isOnline;
 	return true;
 }
@@ -102,25 +87,26 @@ bool QvernoteAPI::initUserStore() {
 	try {
 		qDebug() << __FUNCTION__;
 		QvernoteSettings* settings = QvernoteSettings::Instance();
-		if(settings->getUseSsl() == true)
-		{
+		if(settings->getUseSsl() == true) {
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
 			//QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
 			//qDebug() << "userstore dir:" << pgmDir;
 			//sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
 			//sslSocketFactory->authenticate(false);
-
 			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			userStoreHttpClient = shared_ptr<THttpClient>(new THttpClient(bufferedTransport, EVERNOTE_HOST, EDAM_USER_STORE_PATH));
-		}
-		else {
-			// use http
+		} else {
 			userStoreHttpClient= shared_ptr<THttpClient>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
 		}
 		userStoreHttpClient->open();
 		shared_ptr<TProtocol> clientStoreProtocol(new TBinaryProtocol(userStoreHttpClient));
 		m_UserStoreClient = shared_ptr<UserStoreClient>(new UserStoreClient(clientStoreProtocol));
+		UserStoreConstants usc;
+		if (!m_UserStoreClient->checkVersion(EDAM_CLIENT_NAME, usc.EDAM_VERSION_MAJOR, usc.EDAM_VERSION_MINOR)) {
+            qDebug() << "Error: Failed Evernote API version check";
+            return false;
+        }
 	} catch(TTransportException& e) {
 		qDebug()  << __FUNCTION__ << e.what();
 		setError(e.what(), e.getType());
@@ -145,8 +131,7 @@ bool QvernoteAPI::initNoteStore() {
 	//m_UserStoreClient->getUser(user, getAuthenticationToken());
 
 	try {
-		if(settings->getUseSsl() == true)
-		{
+		if(settings->getUseSsl() == true) {
 			qDebug() << "attempting ssl connection";
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
 			//QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
@@ -156,8 +141,7 @@ bool QvernoteAPI::initNoteStore() {
 			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, noteStorePath));
-		}
-		else {
+		} else {
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, noteStorePath));
 		}
 		noteStoreHttpClient->open();
@@ -189,9 +173,7 @@ bool QvernoteAPI::initNoteStore() {
 
 bool QvernoteAPI::reInitNoteStore() {
 	//m_NotebookList.clear();
-
-	if(!isOnline())
-	{
+	if(!isOnline()) {
 		setError("Unable to connect to the network", 0);
 		return false;
 	}
@@ -213,45 +195,6 @@ void QvernoteAPI::initLocalStore() {
 	}
 }
 
-bool QvernoteAPI::checkVersion() {
-	qDebug() << "attempting to check version!";
-	UserStoreConstants usc;
-
-	if(!isOnline())
-	{
-		setError("Unable to connect to the network", 0);
-		return false;
-	}
-
-	return m_UserStoreClient->checkVersion(EDAM_CLIENT_NAME, usc.EDAM_VERSION_MAJOR, usc.EDAM_VERSION_MINOR);
-}
-
-bool QvernoteAPI::Authenticate() {
-	if(!isOnline())
-	{
-		setError("Unable to connect to the network", 0);
-		return false;
-	}
-
-	//AuthenticationResult authenticationResult;
-	//m_AuthenticationResult = shared_ptr<AuthenticationResult>(new AuthenticationResult());
-
-	try {
-		reInitUserStore();
-	} catch(EDAMUserException& e) {
-		qDebug() << __FUNCTION__ << e.parameter.c_str();
-		setError(e.parameter, e.errorCode);
-		return false;
-	} catch(TTransportException& te) {
-		qDebug() << __FUNCTION__ << te.what();
-		setError(te.what(), te.getType());
-		return false;
-	}
-
-	authThread->setInitialSleep(1000 * (QDateTime::currentDateTime().secsTo(QDateTime::fromTime_t(m_AuthenticationResult->expiration / 1000)) - 60));
-	authThread->start();
-	return true;
-}
 
 qint64 QvernoteAPI::refreshAuthentication()
 {
