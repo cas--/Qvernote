@@ -150,7 +150,8 @@ public:
 	bool sortTags(bool order);
 
 	bool checkAuthenticateToken() { return getAuthenticationToken().length() > 0; }
-	void revokeAuthenticationToken();
+	//currently missing from evernote 1.23 api
+	//void revokeAuthenticationToken();
 	string getAuthenticationToken() {
 		OAuthTokenizer tokenizer;
 		QString data = QvernoteSettings::Instance()->getOAuthToken();

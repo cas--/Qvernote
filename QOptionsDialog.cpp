@@ -207,7 +207,8 @@ void QOptionsDialog::onRevokeAuthClick()
 
 		settings->setOAuthToken("");
 		if(h->isOnline())
-			h->revokeAuthenticationToken();
+			//currently missing from evernote 1.23 api
+			//h->revokeAuthenticationToken();
 			h->setOnline(false);
 			settings->setWorkOnline(false);
 	}

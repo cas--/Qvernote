@@ -195,22 +195,21 @@ void QvernoteAPI::initLocalStore() {
 	}
 }
 
-void QvernoteAPI::revokeAuthenticationToken() {
-
-	qDebug() << __FUNCTION__;
-	try {
-		m_UserStoreClient->revokeLongSession(getAuthenticationToken());
-	} catch(EDAMUserException& e) {
-		qDebug() << __FUNCTION__ << e.parameter.c_str();
-		setError(e.parameter, e.errorCode);
-	} catch(EDAMSystemException& se) {
-			qDebug() << se.message.c_str();
-			setError(se.message, se.errorCode);
-	} catch(TTransportException& te) {
-		qDebug() << __FUNCTION__ << te.what();
-		setError(te.what(), te.getType());
-	}
-}
+//~ void QvernoteAPI::revokeAuthenticationToken() {
+	//~ qDebug() << __FUNCTION__;
+	//~ try {
+		//~ m_UserStoreClient->revokeLongSession(getAuthenticationToken());
+	//~ } catch(EDAMUserException& e) {
+		//~ qDebug() << __FUNCTION__ << e.parameter.c_str();
+		//~ setError(e.parameter, e.errorCode);
+	//~ } catch(EDAMSystemException& se) {
+			//~ qDebug() << se.message.c_str();
+			//~ setError(se.message, se.errorCode);
+	//~ } catch(TTransportException& te) {
+		//~ qDebug() << __FUNCTION__ << te.what();
+		//~ setError(te.what(), te.getType());
+	//~ }
+//~ }
 
 
 qint64 QvernoteAPI::refreshAuthentication()
