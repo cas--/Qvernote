@@ -21,20 +21,15 @@ QOptionsDialog::QOptionsDialog(QWidget *parent)
 	QList<QString> listValues;
 	QvernoteAPI* h = QvernoteAPI::Instance();
 
-	if(h->checkAuthenticateToken())
-	{
-	pbRevokeAuth.setText(trUtf8("Revoke Authentication"));
-	QObject::connect(&pbRevokeAuth, SIGNAL(clicked()), this, SLOT(onRevokeAuthClick()));
-	ui.gridLayout_2->addWidget(&pbRevokeAuth, 1, 0, 1, 2);
+	if(h->checkAuthenticateToken()) {
+		pbRevokeAuth.setText(trUtf8("Revoke Authentication"));
+		QObject::connect(&pbRevokeAuth, SIGNAL(clicked()), this, SLOT(onRevokeAuthClick()));
+		ui.gridLayout_2->addWidget(&pbRevokeAuth, 1, 0, 1, 2);
+	} else {
+		pbRequestAuth.setText(trUtf8("Authenticate with Evernote"));
+		QObject::connect(&pbRequestAuth, SIGNAL(clicked()), this, SLOT(onRequestAuthClick()));
+		ui.gridLayout_2->addWidget(&pbRequestAuth, 1, 0, 1, 2);
 	}
-	else
-	{
-	pbRequestAuth.setText(trUtf8("Request Authentication"));
-	QObject::connect(&pbRequestAuth, SIGNAL(clicked()), this, SLOT(onRequestAuthClick()));
-	ui.gridLayout_2->addWidget(&pbRequestAuth, 1, 0, 1, 2);
-	}
-
-
 
 	QStandardItemModel* onlineSelectionModel = new QStandardItemModel(0, 1);
 	QMaemo5ValueButton* vbOnlineSelection = new QMaemo5ValueButton(trUtf8("Client mode"));
@@ -204,42 +199,45 @@ void QOptionsDialog::onSaveSettingsClick()
 
 void QOptionsDialog::onRevokeAuthClick()
 {
-	// warning this will revoke Qvernote's authorization with Evernote
-	//
-	// api->UserStore.revokeLongSession(authenticationToken)
-	QvernoteSettings* settings = QvernoteSettings::Instance();
-	settings->setOAuthToken("");
-	settings->setWorkOnline(false);
-	settings->Store();
-	saveSettings();
+	if(QMessageBox::question(this, trUtf8("Delete Qvernote Authentication with Evernote"), trUtf8("Are you sure?"),
+			QMessageBox::Yes|QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
+	{
+		QvernoteSettings* settings = QvernoteSettings::Instance();
+		QvernoteAPI* h = QvernoteAPI::Instance();
+
+		settings->setOAuthToken("");
+		if(h->isOnline())
+			h->revokeAuthenticationToken();
+			h->setOnline(false);
+			settings->setWorkOnline(false);
+	}
 }
 
 void QOptionsDialog::onRequestAuthClick()
 {
+	QvernoteAPI* h = QvernoteAPI::Instance();
 	QvernoteSettings* settings = QvernoteSettings::Instance();
-	QvernoteOAuthDialog oauth_dialog;
-	if (oauth_dialog.exec() == QDialog::Rejected) {
-		if (oauth_dialog.response == "") {
+	QvernoteOAuthDialog oauthDialog;
+	if (oauthDialog.exec() == QDialog::Rejected) {
+		if (oauthDialog.response == "") {
 			qDebug() << "Auth cancelled by user going offline";
+			h->setOnline(false);
 			settings->setWorkOnline(false);
 		} else {
 			// the dialog is sending rejected signal even when successful
-			qDebug() << "auth token";
-			settings->setOAuthToken(oauth_dialog.response);
-			settings->setWorkOnline(true);
+			qDebug() << "auth token received";
+			settings->setOAuthToken(oauthDialog.response);
 		}
 	} else {
-		if (oauth_dialog.error or oauth_dialog.response == "") {
-			qDebug() << "Auth Error going offline: " << oauth_dialog.errorMessage;
+		if (oauthDialog.error or oauthDialog.response == "") {
+			qDebug() << "Auth Error going offline: " << oauthDialog.errorMessage;
+			h->setOnline(false);
 			settings->setWorkOnline(false);
 		} else	{
-			qDebug() << "auth token";
-			settings->setOAuthToken(oauth_dialog.response);
-			settings->setWorkOnline(true);
+			qDebug() << "auth token received";
+			settings->setOAuthToken(oauthDialog.response);
 		}
 	}
-	settings->Store();
-	saveSettings();
 }
 
 void QOptionsDialog::onDropDBClick()
@@ -317,46 +315,32 @@ void QOptionsDialog::saveSettings()
 	//close();
 }
 
-void QOptionsDialog::configureSslProtocol(bool checked)
-{
-	QvernoteAPI* h = QvernoteAPI::Instance();
 
-	if(h->reInitNoteStore() == false)
-	{
-		//dynamic_cast<QvernoteView*>(parentWidget())->displayError(trUtf8("Failed to configure SSL"), QString::fromStdString(h->getLastErrorString()));
+void QOptionsDialog::configureSslProtocol(bool checked) {
+	QvernoteAPI* h = QvernoteAPI::Instance();
+	if(h->reInitNoteStore() == false) {
 		emit triggerDisplayError(trUtf8("Failed to configure SSL"), QString::fromStdString(h->getLastErrorString()));
-	}
-	else
-	{
-		//dynamic_cast<QvernoteView*>(parentWidget())->reloadNotebookList();
+	} else {
 		emit triggerReloadNotebookList();
 	}
 }
 
-void QOptionsDialog::configureOnlineMode(bool checked)
-{
-	QvernoteAPI* h = QvernoteAPI::Instance();
 
+void QOptionsDialog::configureOnlineMode(bool checked) {
+	QvernoteAPI* h = QvernoteAPI::Instance();
 	if(h->setOnline(checked) == false)
 	{
-		//dynamic_cast<QvernoteView*>(parentWidget())->displayError(QString(trUtf8("Failed to go %1").arg((checked)? "online" : "offline")), QString::fromStdString(h->getLastErrorString()));
 		emit triggerDisplayError(QString(trUtf8("Failed to go %1").arg((checked)? trUtf8("online") : trUtf8("offline"))), QString::fromStdString(h->getLastErrorString()));
-		//vernoteSettings* settings = QvernoteSettings::Instance();
+		//QvernoteSettings* settings = QvernoteSettings::Instance();
 		//settings->setWorkOnline(!checked);
-	}
-	else
-	{
-		//dynamic_cast<QvernoteView*>(parentWidget())->displayInformationBox(QString(trUtf8("Working %1").arg((checked)? "online" : "offline")));
+	} else {
 		emit triggerDisplayInfo(QString(trUtf8("Working %1").arg((checked)? trUtf8("online") : trUtf8("offline"))));
-
 		if(h->isOnline())
-			//dynamic_cast<QvernoteView*>(parentWidget())->initView();
 			emit triggerInitView();
 	}
 }
 
-void QOptionsDialog::configureOrientation(QvernoteSettings::DisplayOrientation o)
-{
+void QOptionsDialog::configureOrientation(QvernoteSettings::DisplayOrientation o) {
 	dynamic_cast<QvernoteView*>(parentWidget())->setDisplayOrientation(o);
 }
 
