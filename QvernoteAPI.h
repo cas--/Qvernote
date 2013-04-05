@@ -106,8 +106,6 @@ public:
 
 	void initLocalStore();
 
-	bool checkAuthenticateToken() { return getAuthenticationToken().length() > 0; }
-
 	bool	loadNotes(int maxNotes, const Notebook& notebook);
 	bool	getNote(Note& note);
 	bool	getNoteContent(Note& note);
@@ -142,7 +140,6 @@ public:
 	bool getFirstNotebookTag(const string& notebookName, Tag& tag);
 	bool getNextNotebookTag(const string& notebookName, Tag& tag);
 
-
 	bool addNewTag(const string& newTagName, Tag& result);
 	int  updateTag(Tag& updatedTag);
 	bool loadTagList();
@@ -152,6 +149,8 @@ public:
 	bool removeExistingTag(const Tag& tag, Note& note);
 	bool sortTags(bool order);
 
+	bool checkAuthenticateToken() { return getAuthenticationToken().length() > 0; }
+	void revokeAuthenticationToken();
 	string getAuthenticationToken() {
 		OAuthTokenizer tokenizer;
 		QString data = QvernoteSettings::Instance()->getOAuthToken();
