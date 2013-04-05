@@ -1,15 +1,5 @@
-/*
- * QMaemoTextSelectionSupressor.h
- *
- *  Created on: May 25, 2010
- *      Author: alexr
- */
-
-#ifndef QMAEMOTEXTSELECTIONSUPRESSOR_H_
-#define QMAEMOTEXTSELECTIONSUPRESSOR_H_
-
 /****************************************************************************
- **
+ ** Copyright (C) 2010 Alex R <burbulator@gmail.com>
  ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  ** All rights reserved.
  ** Contact: Nokia Corporation (qt-info@nokia.com)
@@ -48,6 +38,8 @@
  ** $QT_END_LICENSE$
  **
  ****************************************************************************/
+#ifndef QMAEMOTEXTSELECTIONSUPRESSOR_H_
+#define QMAEMOTEXTSELECTIONSUPRESSOR_H_
 
 #ifdef Q_WS_MAEMO_5
 
