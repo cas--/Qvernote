@@ -2,7 +2,7 @@ Source: qvernote
 Section: user/office
 Priority: extra
 Maintainer: Calum Lind <calumlind@gmail.com>
-Build-Depends:  libqt4-dev, libqt4-sql-sqlite, libqtm-dev, debhelper (>= 5), libevernote-dev, thrift-dev, libboost1.38-dev, libssl-dev, libpoppler-qt4-dev, libqt4-phonon
+Build-Depends:  libqt4-dev, libqt4-sql-sqlite, libqtm-dev, debhelper (>= 5), libevernote-dev, thrift-dev, libboost1.42-dev, libssl-dev, libpoppler-qt4-dev, libqt4-phonon
 Standards-Version: 3.7.2
 
 Package: qvernote
