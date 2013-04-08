@@ -112,7 +112,7 @@ bool QvernoteAPI::initUserStore() {
 	qDebug() << __FUNCTION__;
 	try {
 		QvernoteSettings* settings = QvernoteSettings::Instance();
-		if(settings->getUseSsl()) {
+		//if(settings->getUseSsl()) {
 			signal(SIGPIPE, SIG_IGN);
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
 			QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
@@ -120,9 +120,9 @@ bool QvernoteAPI::initUserStore() {
 			shared_ptr<TSSLSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			userStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, EDAM_USER_STORE_PATH));
-		} else {
-			userStoreHttpClient= shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
-		}
+		//} else {
+		//	userStoreHttpClient= shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
+		//}
 		userStoreHttpClient->open();
 		shared_ptr<TProtocol> clientStoreProtocol(new TBinaryProtocol(userStoreHttpClient));
 		m_UserStoreClient = shared_ptr<UserStoreClient>(new UserStoreClient(clientStoreProtocol));
@@ -155,7 +155,7 @@ bool QvernoteAPI::initNoteStore() {
 	//m_UserStoreClient->getUser(user, getAuthenticationToken());
 
 	try {
-		if(settings->getUseSsl()) {
+		//if(settings->getUseSsl()) {
 			qDebug() << "attempting ssl connection";
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
 			QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
@@ -163,17 +163,20 @@ bool QvernoteAPI::initNoteStore() {
 			shared_ptr<TSSLSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, noteStorePath));
-		} else {
-			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, noteStorePath));
-		}
+		//} else {
+		//	noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, noteStorePath));
+		//}
 		noteStoreHttpClient->open();
 		shared_ptr<TProtocol> noteStoreProtocol(new TBinaryProtocol(noteStoreHttpClient));
 		m_NoteStoreClient = shared_ptr<NoteStoreClient>(new NoteStoreClient(noteStoreProtocol));
 		try {
+			qDebug() << "attempting to get user";
 			m_UserStoreClient->getUser(user, getAuthenticationToken());
 		} catch(...) {
+			qDebug() << "caught something";
 			// temp code
 			try {
+
 				reInitUserStore();
 				m_UserStoreClient->getUser(user, getAuthenticationToken());
 				qDebug() << "it worked!";

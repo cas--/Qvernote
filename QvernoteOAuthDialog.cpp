@@ -205,8 +205,6 @@ void QvernoteOAuthDialog::userLoginReply(QNetworkReply* reply) {
 
 
 void QvernoteOAuthDialog::sslErrorHandler(QNetworkReply* reply) {
-    if(QvernoteSettings::Instance()->getUseSsl() == false)
-    {
-        reply->ignoreSslErrors();
-    }
+    qDebug() << __FUNCTION__ << "Ignoring SSL Error";
+    reply->ignoreSslErrors();
 }
