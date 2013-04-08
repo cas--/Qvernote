@@ -21,6 +21,8 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 #include <QDebug>
 
+using namespace boost;
+
 QNoteListItemWidget::QNoteListItemWidget(const Note& note, bool isDeleteMode, QWidget *parent)
     : QWidget(parent), m_Note(note), m_bDeleteMode(isDeleteMode), m_bItemMarked(false)
 {

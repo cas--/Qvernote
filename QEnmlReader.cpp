@@ -25,6 +25,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 using namespace std;
+using namespace boost;
 
 static QString enmlElements[] = {
 		"en-note", "en-media", "en-crypt", "en-todo", "img", NULL
@@ -305,7 +306,7 @@ QEnmlContentHandler::EnmlMediaType QEnmlContentHandler::decodeEnmlMediaType(cons
 int	QEnmlContentHandler::decodeResource(const QXmlAttributes & atts, QByteArray& bodyData, QString& fileName)
 {
 	vector<Resource>::iterator resourceIterator = m_Note.resources.begin();
-	LimitsConstants lc;
+	evernote::limits::LimitsConstants lc;
 	QString resourceHash = atts.value("hash");
 	//qDebug() << "resourceHash" << resourceHash;
 	QString bodyHash;
@@ -358,7 +359,7 @@ int	QEnmlContentHandler::decodeResource(const QXmlAttributes & atts, QByteArray&
 int	QEnmlContentHandler::extractRawResource(const QXmlAttributes & atts, QByteArray& bodyData, QString& fileName)
 {
 	vector<Resource>::iterator resourceIterator = m_Note.resources.begin();
-	LimitsConstants lc;
+	evernote::limits::LimitsConstants lc;
 	QString resourceHash = atts.value("hash");
 	QString bodyHash;
 	Resource r;

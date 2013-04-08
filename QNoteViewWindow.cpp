@@ -39,6 +39,8 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include "QPdfPreviewDialog.h"
 #include "QAudioPreviewDialog.h"
 
+using namespace boost;
+
 QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
     : QvernoteWindow(parent), m_Note(note), isNavControlsVisible(false)
 {

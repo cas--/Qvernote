@@ -22,6 +22,8 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include "md5.h"
 #include <QDebug>
 
+using namespace boost;
+
 static QString htmlElements[] = {
 		"tag_image",
 		"tag_audio",
@@ -346,7 +348,7 @@ void QHtmlContentHandler::addMedia(QString sMimeType, const QByteArray& baMediaC
 bool QHtmlContentHandler::findResource(const QString& mediaContentHash)
 {
 	vector<Resource>::iterator resourceIterator = m_Note->resources.begin();
-	LimitsConstants lc;
+	evernote::limits::LimitsConstants lc;
 
 	//qDebug() << __FUNCTION__ << m_Note->resources.size();
 

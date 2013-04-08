@@ -22,40 +22,14 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef QVERNOTEAPI_H_
 #define QVERNOTEAPI_H_
 
-#include <QObject>
-#include <QMutexLocker>
-#include <transport/THttpClient.h>
 #include <UserStore.h>
-#include <UserStore_constants.h>
 #include <NoteStore.h>
+
 #include <boost/shared_ptr.hpp>
+
 #include "QvernoteStorage.h"
 #include "QvernoteSettings.h"
 #include "oauthtokenizer.h"
-
-
-#include <inttypes.h>
-#include <iostream>
-#include <netinet/in.h>
-#include <stdint.h>
-
-#include <protocol/TBinaryProtocol.h>
-#include <transport/TServerSocket.h>
-#include <transport/TBufferTransports.h>
-#include <transport/TServerSocket.h>
-#include <transport/TBufferTransports.h>
-#include <transport/TSSLServerSocket.h>
-#include <transport/TSSLSocket.h>
-#include <server/TSimpleServer.h>
-
-using namespace std;
-using namespace apache::thrift;
-using namespace apache::thrift::protocol;
-using namespace apache::thrift::transport;
-using namespace evernote;
-using namespace evernote::edam;
-using namespace evernote::limits;
-using namespace boost;
 
 #define EDAM_CONSUMER_KEY "casnote"
 #define EDAM_CONSUMER_SECRET "9515ef6237756747"
@@ -136,7 +110,7 @@ public:
 	bool 	copyNote(Guid noteGuid, Guid toNotebookGuid);
 	bool 	moveNote(Guid noteGuid, Guid toNotebookGuid);
 	bool	undeleteNote(Note& note);
-	bool 	loadTrashNoteList(vector<Note>& noteList);
+	void	loadTrashNoteList(vector<Note>& noteList);
 	bool	loadResource(Resource& loadedResource, Guid resourceGuid);
 	bool	loadResourceByHash(Resource& loadedResource, Guid noteGuid, QString hexContentHash);
 
@@ -161,7 +135,7 @@ public:
 	bool getNextTag(Tag& tag);
 	bool addExistingTag(const Tag& tag, Note& note);
 	bool removeExistingTag(const Tag& tag, Note& note);
-	bool sortTags(bool order);
+	void sortTags(bool order);
 
 	bool checkAuthenticateToken() { return getAuthenticationToken().length() > 0; }
 	//currently missing from evernote 1.23 api
@@ -220,7 +194,7 @@ private:
 	bool updateResources(SyncChunk& syncChunk);
 
 	bool updateDB(SyncChunk& syncChunk);
-private:
+
 	static QvernoteAPI* self;
 	int m_nLastUpdateCount;
 	qint64 m_nLastSyncTime;
@@ -231,19 +205,19 @@ private:
 	vector<Tag>	m_TagList;
 	vector<Tag>::iterator m_TagIterator;
 
-	shared_ptr<UserStoreClient> m_UserStoreClient;
-	shared_ptr<NoteStoreClient> m_NoteStoreClient;
+	boost::shared_ptr<evernote::edam::UserStoreClient> m_UserStoreClient;
+	boost::shared_ptr<evernote::edam::NoteStoreClient> m_NoteStoreClient;
 	QvernoteStorage* m_LocalStoreClient;
 
-	shared_ptr<AuthenticationResult> m_AuthenticationResult;
+	boost::shared_ptr<AuthenticationResult> m_AuthenticationResult;
 	NoteList	m_NoteList;
 	NoteCollectionCounts m_NoteCounts;
 	vector<Note>::iterator m_NoteIterator;
 	string	m_sLastError;
 	int		m_nLastError;
 
-	shared_ptr<THttpClient> userStoreHttpClient;
-	shared_ptr<TTransport> noteStoreHttpClient;
+	boost::shared_ptr<apache::thrift::transport::TTransport> userStoreHttpClient;
+	boost::shared_ptr<apache::thrift::transport::TTransport> noteStoreHttpClient;
 	QMutex	dbOpMutex;
 	QMutex  syncThreadMutex;
 	AuthenticationThread* authThread;

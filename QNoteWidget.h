@@ -87,10 +87,10 @@ private:
     QWebView	m_WebView;
     QPixmap		m_Snapshot;
     Note		m_Note;
-    shared_ptr<QEnmlReader> enmlReader;
+    boost::shared_ptr<QEnmlReader> enmlReader;
     QWidget*	m_topWidget;
-    shared_ptr<QNoteSnapshotScene> snapshotScene;
-    shared_ptr<QGraphicsPixmapItem> scenePixmap;
+    boost::shared_ptr<QNoteSnapshotScene> snapshotScene;
+    boost::shared_ptr<QGraphicsPixmapItem> scenePixmap;
     bool isMouseDown;
 };
 

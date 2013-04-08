@@ -88,7 +88,7 @@ private:
     Ui::QNoteViewWindowClass ui;
     Note m_Note;
     QvernoteAPI* m_hEvernote;
-    shared_ptr<QEnmlReader> enmlReader;
+    boost::shared_ptr<QEnmlReader> enmlReader;
     QClickableLabel	*clZoomin, *clZoomout, *clNext, *clPrev, *clFullscreen, *clEdit, *clEmail, *clMap;
     QTimer* navigationControlTimer;
     QPoint	mousePos;
@@ -97,7 +97,7 @@ private:
     QPropertyAnimation* webViewSlide;
     QRect	savedWebViewGeometry;
     bool	slideLeft;
-    shared_ptr<QNoteEditWindow> m_pNoteEditWindow;
+    boost::shared_ptr<QNoteEditWindow> m_pNoteEditWindow;
 #ifdef Q_WS_MAEMO_5
     QMaemoTextSelectionSupressor* supressor;
 #endif

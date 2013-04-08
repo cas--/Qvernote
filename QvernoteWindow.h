@@ -31,8 +31,6 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include <QMaemo5InformationBox>
 #endif
 
-using namespace boost;
-
 class QvernoteWindow;
 //bool QvernoteWindow::callback(QvernoteWindow* pWnd);
 
@@ -74,7 +72,7 @@ public:
 		setDisplayOrientation(m_settings->getDisplayOrientation());
 #endif
 
-		m_pBackgroundJob = shared_ptr<BackgroundJob>(new BackgroundJob(this));
+		m_pBackgroundJob = boost::shared_ptr<BackgroundJob>(new BackgroundJob(this));
 
 		connect(m_pBackgroundJob.get(), SIGNAL(jobSucceeded()), this, SLOT(jobDoneCallback()));
 		connect(m_pBackgroundJob.get(), SIGNAL(jobFailed()), this, SLOT(jobFailedCallback()));
@@ -149,7 +147,7 @@ private:
 
 protected:
 	QvernoteSettings* m_settings;
-	shared_ptr<BackgroundJob>	  m_pBackgroundJob;
+	boost::shared_ptr<BackgroundJob>	  m_pBackgroundJob;
 
 };
 #endif /* QVERNOTEWINDOW_H_ */

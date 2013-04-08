@@ -40,6 +40,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include "QOptionsDialog.h"
 #endif
 
+using namespace boost;
 
 QvernoteView::QvernoteView(QWidget *parent)
     : QvernoteWindow(parent), m_hEvernote(QvernoteAPI::Instance()), isSearchShown(false), isSynchronizing(false)

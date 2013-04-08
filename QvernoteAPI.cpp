@@ -19,16 +19,29 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
 #include "QvernoteAPI.h"
+
 #include <QDebug>
 #include <QTimer>
 #include <QDateTime>
+
+#include <inttypes.h>
+#include <iostream>
+#include <netinet/in.h>
+#include <stdint.h>
+#include <signal.h>
+
 #include <transport/THttpClient.h>
 #include <transport/TSSLSocket.h>
 #include <protocol/TBinaryProtocol.h>
-#include <Thrift.h>
-#include <boost/shared_ptr.hpp>
+#include <transport/TBufferTransports.h>
+
+#include <UserStore_constants.h>
 
 using namespace std;
+using namespace apache::thrift;
+using namespace apache::thrift::protocol;
+using namespace apache::thrift::transport;
+using namespace evernote::edam;
 using namespace boost;
 
 QvernoteAPI* QvernoteAPI::self = NULL;
@@ -96,20 +109,19 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 }
 
 bool QvernoteAPI::initUserStore() {
+	qDebug() << __FUNCTION__;
 	try {
-		qDebug() << __FUNCTION__;
 		QvernoteSettings* settings = QvernoteSettings::Instance();
-		if(settings->getUseSsl() == true) {
+		if(settings->getUseSsl()) {
+			signal(SIGPIPE, SIG_IGN);
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-			//QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
-			//qDebug() << "userstore dir:" << pgmDir;
-			//sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
-			//sslSocketFactory->authenticate(false);
-			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
+			QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
+			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
+			shared_ptr<TSSLSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
-			userStoreHttpClient = shared_ptr<THttpClient>(new THttpClient(bufferedTransport, EVERNOTE_HOST, EDAM_USER_STORE_PATH));
+			userStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, EDAM_USER_STORE_PATH));
 		} else {
-			userStoreHttpClient= shared_ptr<THttpClient>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
+			userStoreHttpClient= shared_ptr<TTransport>(new THttpClient(EVERNOTE_HOST, 80, EDAM_USER_STORE_PATH));
 		}
 		userStoreHttpClient->open();
 		shared_ptr<TProtocol> clientStoreProtocol(new TBinaryProtocol(userStoreHttpClient));
@@ -120,7 +132,7 @@ bool QvernoteAPI::initUserStore() {
             return false;
         }
 	} catch(TTransportException& e) {
-		qDebug()  << __FUNCTION__ << e.what();
+		qDebug()  << __FUNCTION__ << "Exception: " << e.what();
 		setError(e.what(), e.getType());
 		return false;
 	}
@@ -143,14 +155,12 @@ bool QvernoteAPI::initNoteStore() {
 	//m_UserStoreClient->getUser(user, getAuthenticationToken());
 
 	try {
-		if(settings->getUseSsl() == true) {
+		if(settings->getUseSsl()) {
 			qDebug() << "attempting ssl connection";
 			shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-			//QString pgmDir = qApp->applicationDirPath() + "/certs/cacert.pem";
-			//qDebug() << "userstore dir:" << pgmDir;
-			//sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
-			//sslSocketFactory->authenticate(true);
-			shared_ptr<TSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
+			QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
+			sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
+			shared_ptr<TSSLSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
 			shared_ptr<TBufferedTransport> bufferedTransport(new TBufferedTransport(sslSocket));
 			noteStoreHttpClient = shared_ptr<TTransport>(new THttpClient(bufferedTransport, EVERNOTE_HOST, noteStorePath));
 		} else {
@@ -174,7 +184,7 @@ bool QvernoteAPI::initNoteStore() {
 			}
 		}
 	} catch(TTransportException& e) {
-		qDebug() << __FUNCTION__ << e.what();
+		qDebug() << __FUNCTION__ << "Exception: " << e.what();
 		setError(e.what(), e.getType());
 		return false;
 	}
@@ -596,7 +606,7 @@ bool	QvernoteAPI::undeleteNote(Note& note) {
 	return updateExistingNote(note);
 }
 
-bool 	QvernoteAPI::loadTrashNoteList(vector<Note>& noteList) {
+void QvernoteAPI::loadTrashNoteList(vector<Note>& noteList) {
 	NoteFilter filter;
 
 	if(m_LocalStoreClient->isEnabled())
@@ -1010,7 +1020,7 @@ bool tagSortByNameDesc(Tag t1, Tag t2) {
 	return (t1.name >= t2.name);
 }
 
-bool QvernoteAPI::sortTags(bool order) {
+void QvernoteAPI::sortTags(bool order) {
 	std::sort(m_TagList.begin(), m_TagList.end(), (order)? tagSortByNameAsc : tagSortByNameDesc);
 }
 

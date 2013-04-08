@@ -88,8 +88,8 @@ private:
     QString m_HtmlData;
     bool	isNewNote;
     QvernoteAPI* m_hEvernote;
-    shared_ptr<QEnmlReader> enmlReader;
-    shared_ptr<QEnmlWriter> enmlWriter;
+    boost::shared_ptr<QEnmlReader> enmlReader;
+    boost::shared_ptr<QEnmlWriter> enmlWriter;
     int nTodoTagCount;
     QAction* actGps;
     bool	hasDirtyData;

@@ -33,7 +33,7 @@ class QNotebookView : public QWidget
     Q_OBJECT
 
 public:
-    QNotebookView(shared_ptr<QvernoteAPI> hEvernote, QWidget *parent = 0);
+    QNotebookView(boost::shared_ptr<QvernoteAPI> hEvernote, QWidget *parent = 0);
     ~QNotebookView();
 
 private:
@@ -41,7 +41,7 @@ private:
 
 private:
     Ui::QNotebookViewClass ui;
-    shared_ptr<QvernoteAPI> m_hEvernote;
+    boost::shared_ptr<QvernoteAPI> m_hEvernote;
 };
 
 }}

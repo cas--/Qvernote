@@ -20,10 +20,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtGui>
 #include <QApplication>
 #include <QDebug>
-#include "QvernoteAPI.h"
 #include "Qvernote.h"
-#include "QvernoteView.h"
-
 
 int main(int argc, char *argv[])
 {

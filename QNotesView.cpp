@@ -34,6 +34,8 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include "QNoteListView.h"
 #include "QNoteGridView.h"
 
+using namespace boost;
+
 QNotesView::QNotesView(const Notebook& notebook, QWidget *parent)
     : QvernoteWindow(parent), m_hEvernote(QvernoteAPI::Instance()), m_Notebook(notebook), isSearchShown(false), isSynchronizing(false)
 {

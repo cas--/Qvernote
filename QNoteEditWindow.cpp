@@ -38,6 +38,8 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include "modest_interface_p.h"
 #endif
 
+using namespace boost;
+
 QNoteEditWindow::QNoteEditWindow(Note& note, bool bIsNewNote, QWidget *parent)
     : QvernoteWindow(parent), m_Note(note), isNewNote(bIsNewNote), nTodoTagCount(0), hasDirtyData(false)
 {

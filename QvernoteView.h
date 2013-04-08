@@ -75,10 +75,10 @@ private:
 private:
     Ui::QvernoteClass ui;
     QvernoteAPI* m_hEvernote;
-    shared_ptr<QNotesView>			m_pNotesView;
-    shared_ptr<QDeleteNotebookView> m_pDeleteNotebookView;
-    shared_ptr<QTrashWindow> 		m_pTrashWindow;
-    shared_ptr<QKeyGrabber> 		m_pKeyGrabber;
+    boost::shared_ptr<QNotesView>			m_pNotesView;
+    boost::shared_ptr<QDeleteNotebookView> m_pDeleteNotebookView;
+    boost::shared_ptr<QTrashWindow> 		m_pTrashWindow;
+    boost::shared_ptr<QKeyGrabber> 		m_pKeyGrabber;
     //QSyncProgressDialog syncDlg;
     QSyncProgressWidget syncWidget;
     bool	isSearchShown;

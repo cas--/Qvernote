@@ -25,6 +25,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 using namespace qvernote;
 using namespace qvernote::api;
 using namespace qvernote::view;
+using namespace boost;
 
 QNotebookView::QNotebookView(shared_ptr<QvernoteAPI> hEvernote, QWidget *parent)
     : QWidget(parent), m_hEvernote(hEvernote)

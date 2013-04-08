@@ -81,10 +81,10 @@ private:
     bool	isSearchShown;
     bool 	isSynchronizing;
     QAbstractNoteView* m_pNoteListViewWidget;
-    shared_ptr<QNoteViewWindow> 	m_pNoteViewWindow;
-    shared_ptr<QNoteEditWindow> 	m_pNoteEditWindow;
-    shared_ptr<QDeleteNotesView> 	m_pDeleteNotesView;
-    shared_ptr<QKeyGrabber>			m_pKeyGrabber;
+    boost::shared_ptr<QNoteViewWindow> 	m_pNoteViewWindow;
+    boost::shared_ptr<QNoteEditWindow> 	m_pNoteEditWindow;
+    boost::shared_ptr<QDeleteNotesView> 	m_pDeleteNotesView;
+    boost::shared_ptr<QKeyGrabber>			m_pKeyGrabber;
 };
 
 #endif // QNOTESVIEW_H

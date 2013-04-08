@@ -144,7 +144,7 @@ public slots:
 
 private:
 	QXmlInputSource m_EnmlDocumentInputSource;
-	shared_ptr<QEnmlContentHandler> m_EnmlContentHandler;
+	boost::shared_ptr<QEnmlContentHandler> m_EnmlContentHandler;
 	bool m_bLoadExternalReferences;
 	QThumbnailCreator thumbnailCreator;
 };

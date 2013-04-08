@@ -23,7 +23,6 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include "QvernoteView.h"
 #include "QvernoteSettings.h"
 #include "QvernoteAPI.h"
-#include <QThread>
 
 class Qvernote;
 class InitThread : public QThread

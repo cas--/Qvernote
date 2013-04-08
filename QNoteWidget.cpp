@@ -30,6 +30,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace qvernote::api;
 using namespace qvernote::xml;
+using namespace boost;
 
 QNoteWidget::QNoteWidget(Note& note, QWidget* topWidget, QWidget *parent)
     : QWidget(parent), m_Note(note), m_topWidget(topWidget), isMouseDown(false)

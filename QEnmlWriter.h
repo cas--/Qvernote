@@ -157,7 +157,7 @@ private:
 	Note*	m_Note;
 	QString m_sHtmlDocument;
 	QXmlInputSource m_HtmlDocumentInputSource;
-	shared_ptr<QHtmlContentHandler> m_HtmlContentHandler;
+	boost::shared_ptr<QHtmlContentHandler> m_HtmlContentHandler;
 };
 
 #endif /* QENMLWRITER_H_ */
