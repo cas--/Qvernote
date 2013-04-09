@@ -162,15 +162,12 @@ void QvernoteView::createNewNotebook()
 
 void QvernoteView::openNewNoteWindow()
 {
-	Note newNote;// = new Note();
+	qDebug() << "Loading New note window ";
 	Notebook m_Notebook;
 	m_hEvernote->getDefaultNotebook(m_Notebook);
-	newNote.notebookGuid = m_Notebook.guid;
+	m_pNotesView = shared_ptr<QNotesView>(new QNotesView(m_Notebook, this));
+	m_pNotesView->openNewNoteWindow();
 
-	shared_ptr<QNoteEditWindow> m_pNoteEditWindow;
-	m_pNoteEditWindow = shared_ptr<QNoteEditWindow>(new QNoteEditWindow(newNote, true, this));
-	//QObject::connect(m_pNoteEditWindow.get(), SIGNAL(noteUpdated()), this, SLOT());
-	m_pNoteEditWindow->show();
 }
 
 void QvernoteView::synchronizeNoteStore()
