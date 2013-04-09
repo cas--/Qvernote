@@ -54,17 +54,17 @@ QNotebookListItemWidget::QNotebookListItemWidget(Notebook& notebook, QvernoteAPI
 	Tag tag;
 	bool hasNextTag;
 	QString tagList;
-	for(hasNextTag = hEvernote->getFirstNotebookTag(notebook.name, tag); hasNextTag; hasNextTag = hEvernote->getNextNotebookTag(notebook.name, tag))
-	{
+	for(hasNextTag = hEvernote->getFirstNotebookTag(notebook.name, tag); hasNextTag; hasNextTag = hEvernote->getNextNotebookTag(notebook.name, tag)) {
 		tagList += QString::fromUtf8(tag.name.c_str()) + " ";
 	}
-
-	if(tagList.size() == 0)
-	{
-		ui.lNotebookTags->setText(trUtf8("No tags"));
-	}
-	else
-	{
+	if(tagList.size() == 0) {
+		if (m_Notebook.name == "All Notes") {
+			ui.lNotebookTags->setText(trUtf8(""));
+			ui.lTagIcon->setPixmap(QPixmap());
+		} else {
+			ui.lNotebookTags->setText(trUtf8("No tags"));
+		}
+	} else {
 		ui.lNotebookTags->setText(tagList);
 	}
 

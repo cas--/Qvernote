@@ -111,6 +111,12 @@ void QvernoteView::loadNotebookList(QString notebookFilter)
 	//syncDlg.close();
 	ui.lvNotebookList->clear();
 
+	/* Add special "ALL" notebook */
+	Notebook specialAllNotebook;
+	specialAllNotebook.name = "All Notes";
+	QListWidgetItem* iw = new QListWidgetItem(ui.lvNotebookList);
+	iw->setSizeHint(QSize(0, 70));
+	ui.lvNotebookList->addItem(iw);
 
 	for(hasNextNotebook = m_hEvernote->getFirstNotebook(notebook); hasNextNotebook; hasNextNotebook = m_hEvernote->getNextNotebook(notebook))
 	{
@@ -124,17 +130,7 @@ void QvernoteView::loadNotebookList(QString notebookFilter)
 		}
 	}
 
-	/* Add special "ALL" notebook */
-	Notebook specialAllNotebook;
-	specialAllNotebook.name = "All Notes";
-	QListWidgetItem* iw = new QListWidgetItem(ui.lvNotebookList);
-	iw->setSizeHint(QSize(0, 70));
-	ui.lvNotebookList->setItemWidget(iw,
-			new QNotebookListItemWidget(specialAllNotebook,
-					m_hEvernote,
-					noteCount,
-					false,
-					ui.lvNotebookList));
+	ui.lvNotebookList->setItemWidget(iw, new QNotebookListItemWidget(specialAllNotebook, m_hEvernote, noteCount, false, ui.lvNotebookList));
 
 	syncWidget.setVisible(false);
 	ui.lvNotebookList->setVisible(true);

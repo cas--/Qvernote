@@ -86,6 +86,17 @@ public:
 		QNotebookButton* notebookButton;
 		bool hasMoreItems;
 		QvernoteAPI* api = QvernoteAPI::Instance();
+		// Add "All Notes" button in case of currentNotebookName == "All Notes"
+		if(m_sCurrentNotebookName == trUtf8("All Notes"))
+		{
+			notebookButton = new QNotebookButton(m_sCurrentNotebookName, "", this);
+
+			if(m_bIsMultipleSelection)
+				notebookButton->setCheckable(true);
+
+			QObject::connect(notebookButton, SIGNAL(sendNotebookInfo(QString, QString)), this, SLOT(notebookGuidSelected(QString, QString)));
+			layout->addWidget(notebookButton);
+		}
 
 		for(hasMoreItems = api->getFirstNotebook(notebook); hasMoreItems; hasMoreItems = api->getNextNotebook(notebook)) {
 			if(m_sCurrentNotebookName != QString::fromStdString(notebook.name)) {
@@ -107,18 +118,6 @@ public:
 
 				layout->addWidget(notebookButton);
 			}
-		}
-
-		// Add "All Notes" button in case of currentNotebookName == "All Notes"
-		if(m_sCurrentNotebookName == trUtf8("All Notes"))
-		{
-			notebookButton = new QNotebookButton(m_sCurrentNotebookName, "", this);
-
-			if(m_bIsMultipleSelection)
-				notebookButton->setCheckable(true);
-
-			QObject::connect(notebookButton, SIGNAL(sendNotebookInfo(QString, QString)), this, SLOT(notebookGuidSelected(QString, QString)));
-			layout->addWidget(notebookButton);
 		}
 	}
 
