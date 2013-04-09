@@ -174,10 +174,10 @@ void QvernoteOAuthDialog::permanentCredentialsReceived(bool rc) {
 void QvernoteOAuthDialog::userLoginReply(QNetworkReply* reply) {
     if (userLoginPageLoaded)
         return;
-    qDebug() << __FUNCTION__ << "Authentication reply received from Evernote";
-    qDebug() << "error: " << reply->error();
+    //qDebug() << __FUNCTION__ << "Authentication reply received from Evernote";
+    //qDebug() << "error: " << reply->error();
     QString searchReq = "?oauth_token=";
-    qDebug() << "Reply:" << reply->url().toString();
+    //qDebug() << "Reply:" << reply->url().toString();
 
     int pos = reply->url().toString().indexOf(searchReq);
     if (pos>0) {
