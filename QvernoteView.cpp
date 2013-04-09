@@ -69,6 +69,7 @@ QvernoteView::QvernoteView(QWidget *parent)
 	QObject::connect(ui.pbSync, SIGNAL(clicked()), this, SLOT(/*synchronizeNoteStore()*/initView()));
 	QObject::connect(ui.actionSearch, SIGNAL(triggered(bool)), this, SLOT(openSearchDialog()));
 	QObject::connect(ui.actionDelete, SIGNAL(triggered(bool)), this, SLOT(openDeleteNotebookWindow()));
+	QObject::connect(ui.actionNewNotebook, SIGNAL(triggered(bool)), this, SLOT(createNewNotebook()));
 	QObject::connect(ui.actionAbout, SIGNAL(triggered(bool)), this, SLOT(openAboutDialog()));
 	QObject::connect(ui.actionTrash, SIGNAL(triggered(bool)), this, SLOT(openTrashWindow()));
 	QObject::connect(ui.actionOptions, SIGNAL(triggered(bool)), this, SLOT(openOptionsDialog()));

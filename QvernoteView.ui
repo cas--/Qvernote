@@ -127,12 +127,13 @@ along with Qvernote.  If not, see http://www.gnu.org/licenses/.
     <property name="title">
      <string>Settings</string>
     </property>
-    <addaction name="actionSearch"/>
+    <addaction name="actionNewNotebook"/>
     <addaction name="actionDelete"/>
-    <addaction name="actionAbout"/>
+    <addaction name="actionSearch"/>
     <addaction name="actionTrash"/>
     <addaction name="actionOptions"/>
     <addaction name="actionFavorites"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuSettings"/>
   </widget>
@@ -186,6 +187,11 @@ along with Qvernote.  If not, see http://www.gnu.org/licenses/.
   <action name="actionDelete">
    <property name="text">
     <string>Delete Notebooks</string>
+   </property>
+  </action>
+  <action name="actionNewNotebook">
+   <property name="text">
+    <string>New Notebook</string>
    </property>
   </action>
   <action name="actionManage_tags">
