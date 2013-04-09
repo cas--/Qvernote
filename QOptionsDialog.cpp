@@ -91,6 +91,7 @@ QOptionsDialog::QOptionsDialog(QWidget *parent)
 	QStandardItemModel* protocolSelectionModel = new QStandardItemModel(0, 1);
 	QMaemo5ValueButton* vbProtocolSelection = new QMaemo5ValueButton(trUtf8("Protocol"));
 	vbProtocolSelection->setValueLayout(QMaemo5ValueButton::ValueBesideText);
+	vbProtocolSelection->setEnabled(false);
 	protocolSelector = new QMaemo5ListPickSelector;
 
 	listValues.clear();
@@ -100,7 +101,7 @@ QOptionsDialog::QOptionsDialog(QWidget *parent)
 	populateListModel(protocolSelectionModel, listValues);
 
 	protocolSelector->setModel(protocolSelectionModel);
-	protocolSelector->setCurrentIndex(settings->getUseSsl());
+	protocolSelector->setCurrentIndex(true);
 	vbProtocolSelection->setPickSelector(protocolSelector);
 
 	ui.gridLayout_2->addWidget(vbProtocolSelection, 6, 0, 1, 2);
