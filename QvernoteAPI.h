@@ -24,7 +24,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <UserStore.h>
 #include <NoteStore.h>
-
+#include <transport/THttpClient.h>
 #include <boost/shared_ptr.hpp>
 
 #include "QvernoteStorage.h"
@@ -88,7 +88,7 @@ public:
 	}
 
 	bool initUserStore();
-	void reInitUserStore();
+	bool reInitUserStore();
 	bool initNoteStore();
 	bool reInitNoteStore();
 
@@ -216,8 +216,8 @@ private:
 	string	m_sLastError;
 	int		m_nLastError;
 
-	boost::shared_ptr<apache::thrift::transport::TTransport> userStoreHttpClient;
-	boost::shared_ptr<apache::thrift::transport::TTransport> noteStoreHttpClient;
+	boost::shared_ptr<apache::thrift::transport::THttpClient> userStoreHttpTransport;
+	boost::shared_ptr<apache::thrift::transport::THttpClient> noteStoreHttpTransport;
 	QMutex	dbOpMutex;
 	QMutex  syncThreadMutex;
 	AuthenticationThread* authThread;
