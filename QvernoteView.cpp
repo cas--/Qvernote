@@ -166,6 +166,7 @@ void QvernoteView::openNewNoteWindow()
 	Notebook m_Notebook;
 	m_hEvernote->getDefaultNotebook(m_Notebook);
 	m_pNotesView = shared_ptr<QNotesView>(new QNotesView(m_Notebook, this));
+	m_pNotesView->show();
 	m_pNotesView->openNewNoteWindow();
 
 }
