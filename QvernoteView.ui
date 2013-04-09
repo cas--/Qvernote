@@ -71,9 +71,9 @@ along with Qvernote.  If not, see http://www.gnu.org/licenses/.
          <number>0</number>
         </property>
         <item row="1" column="0">
-         <widget class="QPushButton" name="pbNewNotebook">
+         <widget class="QPushButton" name="pbNewNote">
           <property name="text">
-           <string>New Notebook</string>
+           <string>New Note</string>
           </property>
           <property name="icon">
            <iconset resource="Resources/Icons.qrc">

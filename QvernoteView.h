@@ -46,6 +46,7 @@ public slots:
 	void initView();
 	void loadNotebook(QListWidgetItem* p_notebookListItem);
     void createNewNotebook();
+    void openNewNoteWindow();
     void synchronizeNoteStore();
     void reloadNotebookList();
     void loadNotebookList(QString notebookFilter = "");

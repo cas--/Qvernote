@@ -20,6 +20,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #include "QvernoteView.h"
 #include "QvernoteAPI.h"
 #include "QNewNotebookDialog.h"
+#include "QNoteEditWindow.h"
 #include "QNotebookListItemWidget.h"
 #include "QvernoteTypes.h"
 #include "QvernoteSettings.h"
@@ -64,7 +65,7 @@ QvernoteView::QvernoteView(QWidget *parent)
 	}
 
 	QObject::connect(ui.lvNotebookList, SIGNAL(itemClicked(QListWidgetItem *)),  this, SLOT(loadNotebook(QListWidgetItem* )));
-	QObject::connect(ui.pbNewNotebook, SIGNAL(clicked()), this, SLOT(createNewNotebook()));
+	QObject::connect(ui.pbNewNote, SIGNAL(clicked()), this, SLOT(openNewNoteWindow()));
 	QObject::connect(ui.pbSync, SIGNAL(clicked()), this, SLOT(/*synchronizeNoteStore()*/initView()));
 	QObject::connect(ui.actionSearch, SIGNAL(triggered(bool)), this, SLOT(openSearchDialog()));
 	QObject::connect(ui.actionDelete, SIGNAL(triggered(bool)), this, SLOT(openDeleteNotebookWindow()));
@@ -156,6 +157,19 @@ void QvernoteView::createNewNotebook()
 {
 	QNewNotebookDialog pDlg(this);
 	pDlg.exec();
+}
+
+void QvernoteView::openNewNoteWindow()
+{
+	Note newNote;// = new Note();
+	Notebook m_Notebook;
+	m_hEvernote->getDefaultNotebook(m_Notebook);
+	newNote.notebookGuid = m_Notebook.guid;
+
+	shared_ptr<QNoteEditWindow> m_pNoteEditWindow;
+	m_pNoteEditWindow = shared_ptr<QNoteEditWindow>(new QNoteEditWindow(newNote, true, this));
+	//QObject::connect(m_pNoteEditWindow.get(), SIGNAL(noteUpdated()), this, SLOT());
+	m_pNoteEditWindow->show();
 }
 
 void QvernoteView::synchronizeNoteStore()
