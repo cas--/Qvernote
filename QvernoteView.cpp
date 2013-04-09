@@ -303,7 +303,7 @@ void QvernoteView::openOptionsDialog()
 
 void QvernoteView::keyPressEvent(QKeyEvent* event)
 {
-	if(!isSearchShown && !isSynchronizing)
+	if(!isSearchShown && !isSynchronizing && !event->text().isEmpty())
 	{
 		isSearchShown = true;
 		m_pKeyGrabber->setText(event->text());
