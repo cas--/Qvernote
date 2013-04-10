@@ -215,7 +215,7 @@ void QNotesView::clearNote(Note& m_Note)
 
 void QNotesView::keyPressEvent(QKeyEvent* event)
 {
-	if(!isSearchShown && !isSynchronizing)
+	if(!isSearchShown && !isSynchronizing && !event->text().isEmpty())
 	{
 		isSearchShown = true;
 		m_pKeyGrabber->setText(event->text());
