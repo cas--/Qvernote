@@ -34,17 +34,18 @@ QNotebookListItemWidget::QNotebookListItemWidget(Notebook& notebook, QvernoteAPI
 	//else
 	//	ui.lDeleteMark->setVisible(false);
 
-
 	if(m_Notebook.defaultNotebook)
 	{
-		ui.lNotebookIcon->setPixmap(QPixmap(":/IconAdd/star-32.png"));
+		ui.lNotebookIcon->setPixmap(QPixmap(":/IconAdd/notebook_star.png"));
+	} else {
+		ui.lNotebookIcon->setPixmap(QPixmap(":/IconAdd/notebook.png"));
 	}
 
 	QStringList blacklistedNotebooks = QvernoteSettings::Instance()->getBlacklistedNotebooks().split(',');
 	if(blacklistedNotebooks.contains(QString::fromStdString(m_Notebook.guid)) && !m_Notebook.guid.empty())
 	{
 		qDebug() << "Notebook is blacklisted: " << m_Notebook.name.c_str();
-		ui.lNotebookIcon->setPixmap(QPixmap(":/IconAdd/general_presence_offline.png"));
+		ui.lNotebookIcon->setPixmap(QPixmap(":/IconAdd/notebook_blacklist.png"));
 	}
 
 	ui.lNotebookName->setText(QString::fromUtf8(m_Notebook.name.c_str()));
@@ -57,17 +58,18 @@ QNotebookListItemWidget::QNotebookListItemWidget(Notebook& notebook, QvernoteAPI
 	for(hasNextTag = hEvernote->getFirstNotebookTag(notebook.name, tag); hasNextTag; hasNextTag = hEvernote->getNextNotebookTag(notebook.name, tag)) {
 		tagList += QString::fromUtf8(tag.name.c_str()) + " ";
 	}
+
 	if(tagList.size() == 0) {
-		if (m_Notebook.name == "All Notes") {
-			ui.lNotebookTags->setText(trUtf8(""));
-			ui.lTagIcon->setPixmap(QPixmap());
-		} else {
-			ui.lNotebookTags->setText(trUtf8("No tags"));
-		}
+		ui.lNotebookTags->setText(trUtf8("No tags"));
 	} else {
 		ui.lNotebookTags->setText(tagList);
 	}
 
+	if (m_Notebook.name == "All Notes") {
+		ui.lNotebookTags->setText(trUtf8(""));
+		ui.lTagIcon->setPixmap(QPixmap());
+		ui.lNotebookIcon->setPixmap(QPixmap());
+	}
 	//QObject::connect(ui.lDeleteNotebook, SIGNAL(mousePressed()), this, SLOT(deleteNotebook()));
 }
 

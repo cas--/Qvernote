@@ -13,7 +13,6 @@
         <file>tile_img.png</file>
         <file>email_attachment.png</file>
         <file>star-32.png</file>
-        <file>notebook_edit.png</file>
         <file>general_email.png</file>
         <file>Tag-32.png</file>
         <file>widgets_tickmark_list.png</file>
@@ -28,6 +27,9 @@
         <file>notes_bullets.png</file>
         <file>note_zoomin.png</file>
         <file>note_zoomout.png</file>
+        <file>notebook.png</file>
+        <file>notebook_blacklist.png</file>
+        <file>notebook_star.png</file>
         <file>general_contacts.png</file>
         <file>general_fullsize_b.png</file>
         <file>general_fullsize64.png</file>
@@ -40,6 +42,5 @@
         <file>file-audio.png</file>
         <file>file-pdf.png</file>
         <file>gps_location.png</file>
-        <file>general_presence_offline.png</file>
     </qresource>
 </RCC>

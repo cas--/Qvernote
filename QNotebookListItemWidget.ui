@@ -52,7 +52,7 @@ along with Qvernote.  If not, see http://www.gnu.org/licenses/.
     <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>8</number>
    </property>
    <property name="bottomMargin">
     <number>6</number>
@@ -87,6 +87,12 @@ along with Qvernote.  If not, see http://www.gnu.org/licenses/.
    </item>
    <item row="0" column="1">
     <widget class="QLabel" name="lNotebookName">
+      <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>40</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
        <width>700</width>
@@ -188,6 +194,12 @@ along with Qvernote.  If not, see http://www.gnu.org/licenses/.
      </item>
      <item>
       <widget class="QLabel" name="lNotebookTags">
+      <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>24</height>
+      </size>
+      </property>
        <property name="font">
         <font>
          <family>Nokia Sans</family>
