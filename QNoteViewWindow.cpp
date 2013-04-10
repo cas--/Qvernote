@@ -83,7 +83,7 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	QAction* actEmailNote = new QAction(QIcon(":/IconAdd/general_email.png"), "Email", this);
 	//QAction* actZoomin = new QAction(QIcon(":/IconAdd/note_zoomin.png"), "Zoom In"), this);
 	//QAction* actZoomout = new QAction(QIcon(":/IconAdd/note_zoomout.png"), "Zoom Out"), this);
-
+	QAction* actMap = new QAction(QIcon(":/IconAdd/Maps-blue-64.png"), "Open Map", this);
 	QAction* actNext = new QAction(QIcon(":/IconAdd/general_forward.png"), "Next", this);
 	QAction* actPrev = new QAction(QIcon(":/IconAdd/general_back.png"), "Previous", this);
 
@@ -101,6 +101,7 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	noteViewMenu->addAction(actEmailNote);
 	noteViewMenu->addAction(actNext);
 	noteViewMenu->addAction(actPrev);
+	noteViewMenu->addAction(actMap);
 	this->setMenuBar(noteViewMenu);
 	ui.lFavorite->setStyleSheet("background-color: #424142;");
 	ui.lNoteTitle->setStyleSheet("background-color: #424142;");
@@ -115,6 +116,7 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	//QObject::connect(actZoomout, SIGNAL(triggered()), this, SLOT(zoomoutView()));
 	QObject::connect(actNext, SIGNAL(triggered()), SLOT(loadNextNote()));
 	QObject::connect(actPrev, SIGNAL(triggered()), SLOT(loadPrevNote()));
+	QObject::connect(actMap, SIGNAL(triggered()), SLOT(showNoteMap()));
 
 	QObject::connect(ui.lFavorite, SIGNAL(clicked()), SLOT(onFavoriteClicked()));
 
@@ -382,11 +384,11 @@ void QNoteViewWindow::initNavigationControls()
 	clEmail->setPixmap(QPixmap(":/IconAdd/general_email64.png"));
 	clEmail->hide();
 
-	clMap = new QClickableLabel(this);
-	clMap->setBorderEnabled(false);
-	clMap->setForegroundRole(QPalette::Window);
-	clMap->setPixmap(QPixmap(":/IconAdd/Maps-blue-64.png"));
-	clMap->hide();
+	//~ clMap = new QClickableLabel(this);
+	//~ clMap->setBorderEnabled(false);
+	//~ clMap->setForegroundRole(QPalette::Window);
+	//~ clMap->setPixmap(QPixmap(":/IconAdd/Maps-blue-64.png"));
+	//~ clMap->hide();
 
 	QObject::connect(clZoomin, SIGNAL(clicked()), this, SLOT(zoominView()));
 	QObject::connect(clZoomout, SIGNAL(clicked()), this, SLOT(zoomoutView()));
@@ -394,7 +396,7 @@ void QNoteViewWindow::initNavigationControls()
 	QObject::connect(clPrev, SIGNAL(clicked()), SLOT(loadPrevNote()));
 	QObject::connect(clEdit, SIGNAL(clicked()), SLOT(startEditor()));
 	QObject::connect(clEmail, SIGNAL(clicked()), SLOT(emailNote()));
-	QObject::connect(clMap, SIGNAL(clicked()), SLOT(showNoteMap()));
+	//QObject::connect(clMap, SIGNAL(clicked()), SLOT(showNoteMap()));
 
 //#ifdef Q_WS_MAEMO_5
 	QObject::connect(clFullscreen, SIGNAL(clicked()), SLOT(toggleFullScreen()));
@@ -421,10 +423,10 @@ void QNoteViewWindow::displayNavigationControls()
 		clFullscreen->animShow(QSize(64, 64));
 		clEdit->setGeometry(16, height() - 80, 0, 0);
 		clEdit->animShow(QSize(64, 64));
-		clEmail->setGeometry(16, height() / 2 + 16, 0, 0);
-		clEmail->animShow(QSize(64, 64));
-		clMap->setGeometry(16, height() / 2 - 80, 0, 0);
-		clMap->animShow(QSize(64, 64));
+		//clEmail->setGeometry(width() / 2 -32, height() / 2 + 16, 0, 0);
+		//clEmail->animShow(QSize(64, 64));
+		//clMap->setGeometry(16, height() / 2 - 80, 0, 0);
+		//clMap->animShow(QSize(64, 64));
 
 		navigationControlTimer->start(3000);
 	}
@@ -440,7 +442,7 @@ void QNoteViewWindow::hideNavigationControls()
 	clFullscreen->animHide();
 	clEdit->animHide();
 	clEmail->animHide();
-	clMap->animHide();
+	//clMap->animHide();
 	isNavControlsVisible = false;
 }
 
