@@ -55,6 +55,9 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	ui.wvNoteView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 	ui.wvNoteView->page()->setPreferredContentsSize(QSize(800, 600));
 	ui.wvNoteView->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, false);
+	QAbstractKineticScroller *scroller = ui.scrollArea->property("kineticScroller").value<QAbstractKineticScroller *>();
+	if (scroller)
+		scroller->setOvershootPolicy(QAbstractKineticScroller::OvershootAlwaysOff);
 
 	webViewSlide = new QPropertyAnimation(ui.wvNoteView, "geometry");
 	webViewSlide->setDuration(150);
