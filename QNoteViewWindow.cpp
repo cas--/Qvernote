@@ -69,6 +69,8 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	supressor = new QMaemoTextSelectionSupressor(ui.wvNoteView);
 	supressor->enable();
 #endif
+	QWebSettings * settings = ui.wvNoteView->settings();
+	settings->setUserStyleSheetUrl(QUrl::fromLocalFile("qvernote.css"));
 
 	ui.wvNoteView->installEventFilter(new QWebViewEventFilter(ui.wvNoteView, this));
 
