@@ -53,7 +53,7 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	//ui.gridLayout_2->setRowMinimumHeight(3, 400);
 	//loadNote();
 	ui.wvNoteView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-	ui.wvNoteView->page()->setPreferredContentsSize(QSize(800, 600));
+	ui.wvNoteView->page()->setPreferredContentsSize(QSize(792, 424));
 	ui.wvNoteView->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, false);
 	QAbstractKineticScroller *scroller = ui.scrollArea->property("kineticScroller").value<QAbstractKineticScroller *>();
 	if (scroller)
@@ -103,11 +103,6 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	noteViewMenu->addAction(actPrev);
 	noteViewMenu->addAction(actMap);
 	this->setMenuBar(noteViewMenu);
-	ui.lFavorite->setStyleSheet("background-color: #424142;");
-	ui.lNoteTitle->setStyleSheet("background-color: #424142;");
-	ui.lNotebookName->setStyleSheet("background-color: #424142;");
-	ui.lTagIcon->setStyleSheet("background-color: #424142;");
-	ui.lNoteTags->setStyleSheet("background-color: #424142;");
 	initNavigationControls();
 
 	QObject::connect(actEditNote, SIGNAL(triggered()), SLOT(startEditor()));
@@ -197,8 +192,8 @@ void QNoteViewWindow::resizeWebView()
 	//qDebug() << trUtf8("frameGeometry") << fr;
 	//qDebug() << trUtf8("contentRect") << cr;
 	//s.setHeight(s.height() + 1 * ui.wvNoteEdit->fontMetrics().lineSpacing());
-	ui.wvNoteView->setMinimumHeight(qMax(70, s.height()  + (fr.height() - cr.height() - 1) + 20));
-	ui.wvNoteView->setMinimumWidth(qMax(geometry().width() - 16, s.width()));
+	ui.wvNoteView->setMinimumHeight(qMax(geometry().height(), s.height()));
+	ui.wvNoteView->setMinimumWidth(qMax(geometry().width() - 8, s.width()));
 	ui.wvNoteView->setZoomFactor(1.0);
 	updateHeader();
 	setProgressIndicator(false);
@@ -266,7 +261,6 @@ void QNoteViewWindow::zoominView()
 		ui.wvNoteView->setMinimumWidth(ui.wvNoteView->page()->mainFrame()->contentsSize().width());
 		ui.wvNoteView->setMinimumHeight(ui.wvNoteView->page()->mainFrame()->contentsSize().height());
 	}
-
 }
 
 void QNoteViewWindow::zoomoutView()
@@ -411,17 +405,17 @@ void QNoteViewWindow::displayNavigationControls()
 	if(isNavControlsVisible == false)
 	{
 		isNavControlsVisible = true;
-		clZoomin->setGeometry(width() - 85, height() / 2 - 80, 0, 0);
+		clZoomin->setGeometry(width() - 80, height() / 2 - 50, 0, 0);
 		clZoomin->animShow(QSize(64, 64));
-		clZoomout->setGeometry(width() - 85, height() / 2 + 16, 0, 0);
+		clZoomout->setGeometry(width() - 80, height() / 2 + 50, 0, 0);
 		clZoomout->animShow(QSize(64, 64));
-		clPrev->setGeometry(width() / 2 - 90, height() - 80, 0, 0);
+		clPrev->setGeometry(width() / 2 - 150, height() - 70, 0, 0);
 		clPrev->animShow(QSize(64, 64));
-		clNext->setGeometry(width() / 2 + 26, height() - 80, 0, 0);
+		clNext->setGeometry(width() / 2 + 86, height() - 70, 0, 0);
 		clNext->animShow(QSize(64, 64));
-		clFullscreen->setGeometry(width() - 80, height() - 80, 0, 0);
+		clFullscreen->setGeometry(width() - 75, height() - 70, 0, 0);
 		clFullscreen->animShow(QSize(64, 64));
-		clEdit->setGeometry(16, height() - 80, 0, 0);
+		clEdit->setGeometry(width() / 2 - 27, height() - 70, 0, 0);
 		clEdit->animShow(QSize(64, 64));
 		//clEmail->setGeometry(width() / 2 -32, height() / 2 + 16, 0, 0);
 		//clEmail->animShow(QSize(64, 64));
