@@ -29,8 +29,8 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 
 
 void InitThread::run() {
-	qDebug() << __FUNCTION__ << "qvernote";
-	if(m_pQvernote->m_hEvernote->initNoteStore() == true) {
+	qDebug() << __FUNCTION__ << "Qvernote";
+	if (m_pQvernote->m_hEvernote->initNoteStore()) {
 		qDebug() << "notestore init'd now trying localstore";
 		m_pQvernote->m_hEvernote->initLocalStore();
 		emit m_pQvernote->noteStoreInitialized();
@@ -64,7 +64,7 @@ void Qvernote::Init() {
 	qDebug() << __FUNCTION__;
 	if(settings->getWorkOnline() == false)
 		m_hEvernote->setOnline(false);
-	if(m_hEvernote->isOnline() and m_hEvernote->checkAuthenticateToken()) {
+	if(m_hEvernote->isOnline()) {
 		initThread = new InitThread(this);
 		initThread->start();
 	} else {

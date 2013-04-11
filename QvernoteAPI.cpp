@@ -55,7 +55,7 @@ void SynchronizationThread::run() {
 }
 
 QvernoteAPI::QvernoteAPI() : QObject() {
-	if(QvernoteSettings::Instance()->getWorkOnline())
+	if(QvernoteSettings::Instance()->getWorkOnline() and checkAuthenticateToken())
 		m_bIsOnline = initUserStore();
 	else
 		m_bIsOnline = false;
@@ -68,21 +68,22 @@ QvernoteAPI::~QvernoteAPI() {
 }
 
 bool QvernoteAPI::setOnline(bool isOnline) {
+	qDebug() << __FUNCTION__;
 	if(isOnline) {
-		m_bIsOnline = reInitUserStore();
-		if(m_bIsOnline) {
-			if(checkAuthenticateToken()) {
+		if(checkAuthenticateToken()) {
+			m_bIsOnline = reInitUserStore();
+			if(m_bIsOnline) {
 				reInitNoteStore();
+				qDebug() << "Starting threads";
+				syncThread->setTerminate(false);
+				if(!syncThread->isRunning())
+					syncThread->start();
 			} else {
-				// set offline?
+				qDebug() << "Failed to go online";
 				return false;
 			}
-			qDebug() << "Starting threads";
-			syncThread->setTerminate(false);
-			if(!syncThread->isRunning())
-				syncThread->start();
 		} else {
-			qDebug() << "Failed to go online";
+			qDebug() << "No auth token";
 			return false;
 		}
 	} else {
@@ -113,6 +114,8 @@ bool QvernoteAPI::initUserStore() {
 			qDebug() << "Error: Failed Evernote API version check";
 			return false;
 		}
+		m_UserStoreClient->getUser(user, getAuthenticationToken());
+
 	} catch(TTransportException& e) {
 		qDebug()  << __FUNCTION__ << "Exception: " << e.what();
 		setError(e.what(), e.getType());
@@ -124,19 +127,22 @@ bool QvernoteAPI::initUserStore() {
 bool QvernoteAPI::reInitUserStore() {
 	qDebug() << __FUNCTION__;
 	if(userStoreHttpTransport != NULL && userStoreHttpTransport->isOpen()){
-		userStoreHttpTransport->flush();
-		userStoreHttpTransport->close();
+		try {
+			qDebug() << __FUNCTION__ << "attempt get user";
+			m_UserStoreClient->getUser(user, getAuthenticationToken());
+			return true;
+		} catch(TTransportException& e) {
+			qDebug() << __FUNCTION__ << "Exception: " << e.what();
+			userStoreHttpTransport->close();
+		}
 	}
 	return initUserStore();
 }
 
 bool QvernoteAPI::initNoteStore() {
 	qDebug() << __FUNCTION__;
-	reInitUserStore();
-	m_UserStoreClient->getUser(user, getAuthenticationToken());
 	string noteStorePath = string(EDAM_NOTE_STORE_PATH) + string("/") + getShardId();
 	try {
-		qDebug() << "attempting ssl connection";
 		shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
 		QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
 		sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
@@ -166,9 +172,14 @@ bool QvernoteAPI::reInitNoteStore() {
 		return false;
 	}
 	if(noteStoreHttpTransport != NULL && noteStoreHttpTransport->isOpen()){
-		qDebug() << "shutdown notestore";
-		noteStoreHttpTransport->flush();
-		noteStoreHttpTransport->close();
+		try {
+			qDebug() << __FUNCTION__ << "attempt get sync state";
+			m_NoteStoreClient->getSyncState(syncState, getAuthenticationToken());
+			return true;
+		} catch(TTransportException& e) {
+			qDebug() << __FUNCTION__ << "Exception: " << e.what();
+			noteStoreHttpTransport->close();
+		}
 	}
 	return initNoteStore();
 }
