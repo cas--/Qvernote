@@ -78,6 +78,7 @@ QvernoteView::QvernoteView(QWidget *parent)
 	QObject::connect(m_hEvernote, SIGNAL(progressUpdated(QString)), &syncWidget, SLOT(updateProgressData(QString)));
 	qRegisterMetaType<Guid>("Guid");
 	QObject::connect(m_hEvernote, SIGNAL(noteContentUpdated(Guid)), this, SLOT(createNoteSnapshot(Guid)));
+	QObject::connect(m_hEvernote, SIGNAL(noteContentUpdated(Guid)), this, SLOT(reloadNotebookList()));
 	//QObject::connect(this, SIGNAL(progressDataUpdated(QString)), &syncWidget, SLOT(updateProgressData(QString)));
 
 	m_pKeyGrabber = shared_ptr<QKeyGrabber>(new QKeyGrabber("", this));
