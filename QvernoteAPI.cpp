@@ -408,6 +408,7 @@ bool	QvernoteAPI::createNewNote(Note& newNote) {
 	{
 		m_LocalStoreClient->createNote(newNote);
 		m_NoteList.notes.push_back(newNote);
+		emit noteContentUpdated(newNote.guid);
 	}
 	else
 	{
@@ -425,7 +426,9 @@ bool	QvernoteAPI::createNewNote(Note& newNote) {
 		}
 
 		m_NoteList.notes.push_back(createdNote);
+		emit noteContentUpdated(createdNote.guid);
 	}
+
 
 	return true;
 }
@@ -448,6 +451,7 @@ bool 	QvernoteAPI::updateExistingNote(Note& existingNote) {
 			m_NoteList.notes.erase(pos);
 			m_NoteList.notes.insert(pos, existingNote);
 		}
+		emit noteContentUpdated(existingNote.guid);
 	}
 	else
 	{
@@ -468,6 +472,7 @@ bool 	QvernoteAPI::updateExistingNote(Note& existingNote) {
 			m_NoteList.notes.erase(pos);
 			m_NoteList.notes.insert(pos, updatedNote);
 		}
+		emit noteContentUpdated(updatedNote.guid);
 	}
 
 	return true;
@@ -499,6 +504,7 @@ bool	QvernoteAPI::deleteNote(Guid noteGuid) {
 	if(searchNoteList(pos, noteGuid)) {
 		m_NoteList.notes.erase(pos);
 	}
+	emit noteContentUpdated(noteGuid);
 	return true;
 }
 
