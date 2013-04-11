@@ -376,6 +376,7 @@ void QNoteEditWindow::setTag(bool state, Tag tag)
 		m_hEvernote->addExistingTag(tag, /*enmlWriter->getNotePtr()*/m_Note);
 	else
 		m_hEvernote->removeExistingTag(tag, /*enmlWriter->getNotePtr()*/m_Note);
+	setDirtyData();
 }
 
 void QNoteEditWindow::loadResource(QUrl url)
