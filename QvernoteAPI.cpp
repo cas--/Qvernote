@@ -45,15 +45,6 @@ using namespace boost;
 
 QvernoteAPI* QvernoteAPI::self = NULL;
 
-void AuthenticationThread::run() {
-	while(true) {
-		msleep(m_initialSleep);
-		if(m_fTerminate)
-			return;
-		m_initialSleep = m_hEvernote->refreshAuthentication();
-	}
-}
-
 void SynchronizationThread::run() {
 	while(true) {
 		msleep(QvernoteSettings::Instance()->getSyncUpdateRate() * 60000);
@@ -69,7 +60,6 @@ QvernoteAPI::QvernoteAPI() : QObject() {
 	else
 		m_bIsOnline = false;
 
-	authThread = new AuthenticationThread(this);
 	syncThread = new SynchronizationThread(this);
 }
 
@@ -88,10 +78,7 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 				return false;
 			}
 			qDebug() << "Starting threads";
-			authThread->setTerminate(false);
 			syncThread->setTerminate(false);
-			if(!authThread->isRunning())
-				authThread->start();
 			if(!syncThread->isRunning())
 				syncThread->start();
 		} else {
@@ -100,7 +87,6 @@ bool QvernoteAPI::setOnline(bool isOnline) {
 		}
 	} else {
 		qDebug() << "Terminating threads";
-		authThread->setTerminate(true);
 		syncThread->setTerminate(true);
 	}
 	m_bIsOnline = isOnline;
@@ -162,9 +148,7 @@ bool QvernoteAPI::initNoteStore() {
 		m_NoteStoreClient = shared_ptr<NoteStoreClient>(new NoteStoreClient(noteStoreProtocol));
 		noteStoreHttpTransport->open();
 
-		SyncState syncState;
         m_NoteStoreClient->getSyncState(syncState, getAuthenticationToken());
-
 	} catch(TTransportException& e) {
 		qDebug() << __FUNCTION__ << "Exception: " << e.what();
 		setError(e.what(), e.getType());
@@ -216,29 +200,6 @@ void QvernoteAPI::initLocalStore() {
 		//~ setError(te.what(), te.getType());
 	//~ }
 //~ }
-
-
-qint64 QvernoteAPI::refreshAuthentication()
-{
-	qDebug() << __FUNCTION__ << "Re-auth started";
-	try {
-		reInitUserStore();
-	} catch(EDAMUserException& e) {
-		qDebug() << __FUNCTION__ << e.parameter.c_str();
-		setError(e.parameter, e.errorCode);
-		return 60000;
-	} catch(EDAMSystemException& se) {
-			qDebug() << se.message.c_str();
-			setError(se.message, se.errorCode);
-			return 60000;
-	} catch(TTransportException& te) {
-		qDebug() << __FUNCTION__ << te.what();
-		setError(te.what(), te.getType());
-		return 60000;
-	}
-
-	return 1000 * (QDateTime::currentDateTime().secsTo(QDateTime::fromTime_t(m_AuthenticationResult->expiration / 1000)) - 60);
-}
 
 bool noteSortByDate(Note n1, Note n2) {
 	if(QvernoteSettings::Instance()->getNoteDisplayOrder() == QvernoteSettings::NDO_ASC)
@@ -1088,9 +1049,7 @@ bool QvernoteAPI::getSyncChunk(SyncChunk& syncChunk, int afterUSN, int maxEntrie
 }
 
 bool QvernoteAPI::synchronizeLocalStorage() {
-	SyncState syncState;
-
-	qDebug() << __FUNCTION__ << "running";
+	qDebug() << __FUNCTION__;
 
 	if(!isOnline())
 	{

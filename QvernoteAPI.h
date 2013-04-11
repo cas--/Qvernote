@@ -40,26 +40,6 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 
 class QvernoteAPI;
 
-class AuthenticationThread : public QThread {
-
-	Q_OBJECT
-
-public:
-	AuthenticationThread(QvernoteAPI* hEvernote) : m_hEvernote(hEvernote), m_fTerminate(false) {}
-
-	void setInitialSleep(qint64 initialSleep) {
-		m_initialSleep = initialSleep;
-	}
-
-	void setTerminate(bool flag) { m_fTerminate = flag; }
-
-	void run();
-private:
-	QvernoteAPI* m_hEvernote;
-	qint64 m_initialSleep;
-	bool m_fTerminate;
-};
-
 class SynchronizationThread : public QThread {
 
 	Q_OBJECT
@@ -101,7 +81,6 @@ public:
 	bool	createNewNote(Note& newNote);
 	bool 	updateExistingNote(Note& existingNote);
 	bool	deleteNote(Guid noteGuid);
-	//bool 	searchNotes(const string& searchString, int maxResults);
 	bool 	searchNotes(const NoteFilter& filter, int maxResults);
 
 	bool	searchNoteList(vector<Note>::iterator& pos, Guid noteGuid);
@@ -160,7 +139,6 @@ public:
 	NoteList& getNoteList() { return m_NoteList; }
 
 public slots:
-	qint64 refreshAuthentication();
 	bool synchronizeLocalStorage();
 
 signals:
@@ -219,10 +197,10 @@ private:
 	boost::shared_ptr<apache::thrift::transport::THttpClient> noteStoreHttpTransport;
 	QMutex	dbOpMutex;
 	QMutex  syncThreadMutex;
-	AuthenticationThread* authThread;
 	SynchronizationThread* syncThread;
 	bool m_bIsOnline;
 	User user;
+	SyncState syncState;
 };
 
 #endif /* QVERNOTEAPI_H_ */
