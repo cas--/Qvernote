@@ -227,7 +227,7 @@ void QNoteEditWindow::saveNote()
 		m_pBackgroundJob->start();
 }
 
-bool QNoteEditWindow::createNote()
+bool QNoteEditWindow::saveNoteJob()
 {
 	if(isNewNote)
 	{

@@ -70,7 +70,7 @@ public slots:
 
     void setDirtyData() { hasDirtyData = true; }
 
-    bool backgroundJobCallback() { return createNote(); }
+    bool backgroundJobCallback() { return saveNoteJob(); }
     void jobDoneCallback() { noteSaveSuccess(); }
     void jobFailedCallback() { noteSaveFailure(); }
 
@@ -78,7 +78,7 @@ public slots:
     void setChecked(int tagId);
 
 private:
-    bool createNote();
+    bool saveNoteJob();
     void noteSaveFailure();
     void noteSaveSuccess();
 
