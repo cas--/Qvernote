@@ -38,6 +38,7 @@ void QvernoteSettings::Load() {
 
 	LOAD_VAR(String(), BlacklistedNotebooks, "qvernote/blacklisted_notebooks", "");
 	LOAD_VAR(Int(), MaxNoteCount, "qvernote/max_note_count", 0);
+	LOAD_VAR(Int(), SyncUpdateRate, "qvernote/sync_update_rate", 5)
 }
 
 void QvernoteSettings::Store() {
@@ -54,6 +55,7 @@ void QvernoteSettings::Store() {
 	STORE_VAR("qvernote/mapsprovider", MapsProvider);
 	STORE_VAR("qvernote/blacklisted_notebooks", BlacklistedNotebooks);
 	STORE_VAR("qvernote/max_note_count", MaxNoteCount);
+	STORE_VAR("qvernote/sync_update_rate", SyncUpdateRate);
 }
 
 

@@ -80,6 +80,7 @@ public:
 	CONFIG_VAR(MapsProvider, MapsProvider);
 	CONFIG_VAR(QString, BlacklistedNotebooks);
 	CONFIG_VAR(int, MaxNoteCount);
+	CONFIG_VAR(int, SyncUpdateRate);
 
 public:
 	void 	Store();

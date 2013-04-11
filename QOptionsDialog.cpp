@@ -167,6 +167,42 @@ QOptionsDialog::QOptionsDialog(QWidget *parent)
 
 	ui.gridLayout_2->addWidget(vbMaxNoteCountSelection, 8, 0, 1, 2);
 
+	QStandardItemModel* syncUpdateRateModel = new QStandardItemModel(0, 1);
+	QMaemo5ValueButton* vbsyncUpdateRateSelection = new QMaemo5ValueButton(trUtf8("Sync interval (minutes)"));
+	vbsyncUpdateRateSelection->setValueLayout(QMaemo5ValueButton::ValueBesideText);
+	syncUpdateRateSelector = new QMaemo5ListPickSelector;
+
+	listValues.clear();
+	listValues.append(trUtf8("5"));
+	listValues.append("15");
+	listValues.append("30");
+	listValues.append("60");
+	listValues.append("120");
+
+	populateListModel(syncUpdateRateModel, listValues);
+
+	syncUpdateRateSelector->setModel(syncUpdateRateModel);
+	switch(settings->getSyncUpdateRate()) {
+	case 5:
+		syncUpdateRateSelector->setCurrentIndex(0);
+		break;
+	case 15:
+		syncUpdateRateSelector->setCurrentIndex(1);
+		break;
+	case 30:
+		syncUpdateRateSelector->setCurrentIndex(2);
+		break;
+	case 60:
+		syncUpdateRateSelector->setCurrentIndex(3);
+		break;
+	case 120:
+		syncUpdateRateSelector->setCurrentIndex(4);
+		break;
+	}
+	vbsyncUpdateRateSelection->setPickSelector(syncUpdateRateSelector);
+
+	ui.gridLayout_2->addWidget(vbsyncUpdateRateSelection, 9, 0, 1, 2);
+
 	QStandardItemModel* mapsProviderSelectionModel = new QStandardItemModel(0, 1);
 	QMaemo5ValueButton* vbMapsProviderSelection = new QMaemo5ValueButton(trUtf8("Maps provider"));
 	vbMapsProviderSelection->setValueLayout(QMaemo5ValueButton::ValueBesideText);
@@ -182,19 +218,19 @@ QOptionsDialog::QOptionsDialog(QWidget *parent)
 	mapsProviderSelector->setCurrentIndex(settings->getMapsProvider());
 	vbMapsProviderSelection->setPickSelector(mapsProviderSelector);
 
-	ui.gridLayout_2->addWidget(vbMapsProviderSelection, 9, 0, 1, 2);
+	ui.gridLayout_2->addWidget(vbMapsProviderSelection, 10, 0, 1, 2);
 
 	pbBlacklistedNotebooks.setText(trUtf8("Blacklisted notebooks"));
 	m_slBlacklistedNotebooks = settings->getBlacklistedNotebooks().split(',');
 	QObject::connect(&pbBlacklistedNotebooks, SIGNAL(clicked()), this, SLOT(selectBlacklistedNotebooks()));
-	ui.gridLayout_2->addWidget(&pbBlacklistedNotebooks, 10, 0, 1, 2);
+	ui.gridLayout_2->addWidget(&pbBlacklistedNotebooks, 11, 0, 1, 2);
 
 	pbDeleteThumbs.setText(trUtf8("Clear thumbnails"));
 	QObject::connect(&pbDeleteThumbs, SIGNAL(clicked()), this, SLOT(deleteThumbnails()));
-	ui.gridLayout_2->addWidget(&pbDeleteThumbs, 11, 0, 1, 2);
+	ui.gridLayout_2->addWidget(&pbDeleteThumbs, 12, 0, 1, 2);
 	pbDropDB.setText(trUtf8("Delete offline database"));
 	QObject::connect(&pbDropDB, SIGNAL(clicked()), this, SLOT(onDropDBClick()));
-	ui.gridLayout_2->addWidget(&pbDropDB, 12, 0, 1, 2);
+	ui.gridLayout_2->addWidget(&pbDropDB, 13, 0, 1, 2);
 
 	QObject::connect(ui.pbSave, SIGNAL(clicked()), SLOT(onSaveSettingsClick()));
 	QObject::connect(this, SIGNAL(triggerDisplayError(QString, QString)), SLOT(onDisplayError(QString, QString)));
@@ -327,6 +363,7 @@ void QOptionsDialog::saveSettings()
 
 	settings->setNotesView((QvernoteSettings::NotesView)notesViewSelector->currentIndex());
 	settings->setMaxNoteCount(maxNoteCountSelector->currentValueText().toInt());
+	settings->setSyncUpdateRate(syncUpdateRateSelector->currentValueText().toInt());
 	settings->setMapsProvider((QvernoteSettings::MapsProvider)mapsProviderSelector->currentIndex());
 
 	if(settings->getBlacklistedNotebooks() != m_slBlacklistedNotebooks.join(","))

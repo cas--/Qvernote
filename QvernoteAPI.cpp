@@ -56,7 +56,7 @@ void AuthenticationThread::run() {
 
 void SynchronizationThread::run() {
 	while(true) {
-		msleep(SYNC_UPDATE_RATE);
+		msleep(QvernoteSettings::Instance()->getSyncUpdateRate() * 60000);
 		if(m_fTerminate)
 			return;
 		m_hEvernote->synchronizeLocalStorage();

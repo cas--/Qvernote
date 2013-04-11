@@ -72,6 +72,7 @@ private:
 	QMaemo5ListPickSelector *notesViewSelector;
 	QMaemo5ListPickSelector *maxNoteCountSelector;
 	QMaemo5ListPickSelector	*mapsProviderSelector;
+	QMaemo5ListPickSelector *syncUpdateRateSelector;
 
 	QPushButton pbRevokeAuth;
 	QPushButton pbRequestAuth;
