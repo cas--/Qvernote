@@ -59,10 +59,6 @@ QvernoteView::QvernoteView(QWidget *parent)
 		displayInformationBox(trUtf8("Network error occurred, working offline"));
 		settings->setWorkOnline(false);
 	}
-	else
-	{
-		displayInformationBox(trUtf8("Loading Notes. Please wait, may take time..."));
-	}
 
 	QObject::connect(ui.lvNotebookList, SIGNAL(itemClicked(QListWidgetItem *)),  this, SLOT(loadNotebook(QListWidgetItem* )));
 	QObject::connect(ui.pbNewNote, SIGNAL(clicked()), this, SLOT(openNewNoteWindow()));
@@ -174,15 +170,8 @@ void QvernoteView::synchronizeNoteStore()
 	m_pBackgroundJob->start();
 	ui.pbSync->setEnabled(false);
 
-	if(m_hEvernote->isOnline())
-	{
-		displayInformationBox(trUtf8("Synchronizing with Evernote. Please wait..."));
-	}
-	else
-	{
-		//displayInformationBox(trUtf8("Unable to synchronize in offline mode"));
+	if(!m_hEvernote->isOnline())
 		setProgressIndicator(false);
-	}
 }
 
 void QvernoteView::reloadNotebookList()

@@ -84,7 +84,6 @@ QNotesView::QNotesView(const Notebook& notebook, QWidget *parent)
 
 	setProgressIndicator(true);
 	reloadNotes();
-	displayInformationBox(trUtf8("Loading notes. Please wait..."));
 }
 
 
@@ -119,7 +118,6 @@ QNotesView::QNotesView(QString windowTitle, QWidget *parent)
 	ui.gridLayout->addWidget(m_pKeyGrabber.get(), 2, 0);
 
 	setProgressIndicator(true);
-	displayInformationBox(trUtf8("Loading notes. Please wait..."));
 	loadNotesIntoView();
 }
 
