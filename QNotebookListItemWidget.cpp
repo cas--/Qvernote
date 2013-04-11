@@ -68,7 +68,7 @@ QNotebookListItemWidget::QNotebookListItemWidget(Notebook& notebook, QvernoteAPI
 	if (m_Notebook.name == "All Notes") {
 		ui.lNotebookTags->setText(trUtf8(""));
 		ui.lTagIcon->setPixmap(QPixmap());
-		ui.lNotebookIcon->setPixmap(QPixmap());
+		ui.lNotebookIcon->setPixmap(QPixmap(":/IconAdd/notebook_all.png"));
 	}
 	//QObject::connect(ui.lDeleteNotebook, SIGNAL(mousePressed()), this, SLOT(deleteNotebook()));
 }
