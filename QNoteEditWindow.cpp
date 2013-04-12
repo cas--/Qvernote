@@ -50,7 +50,7 @@ QNoteEditWindow::QNoteEditWindow(Note& note, bool bIsNewNote, QWidget *parent)
 	m_hEvernote = QvernoteAPI::Instance();
 	ui.wvNoteEdit->settings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, false);
 	QWebSettings * settings = ui.wvNoteEdit->settings();
-	settings->setUserStyleSheetUrl(QUrl::fromLocalFile("qvernote.css"));
+	settings->setUserStyleSheetUrl(QUrl::fromLocalFile(qApp->applicationDirPath() + "/" + "qvernote.css"));
 	ui.wvNoteEdit->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
 	if(isNewNote)

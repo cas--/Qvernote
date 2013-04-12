@@ -73,7 +73,7 @@ QNoteViewWindow::QNoteViewWindow(const Note& note, QWidget *parent)
 	supressor->enable();
 #endif
 	QWebSettings * settings = ui.wvNoteView->settings();
-	settings->setUserStyleSheetUrl(QUrl::fromLocalFile("qvernote.css"));
+	settings->setUserStyleSheetUrl(QUrl::fromLocalFile(qApp->applicationDirPath() + "/" + "qvernote.css"));
 
 	ui.wvNoteView->installEventFilter(new QWebViewEventFilter(ui.wvNoteView, this));
 
