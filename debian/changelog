@@ -1,3 +1,10 @@
+qvernote (0.7-1maemo1) stable; urgency=low
+
+  * Fix HTTPS Issues
+  * Lots of UI tweaks
+
+ -- Calum Lind <calumlind@gmail.com>  Thu, 11 Apr 2013 23:21:50 +0100
+
 qvernote (0.6-1maemo1) stable; urgency=low
 
   * Add Evernote OAuth support
@@ -166,7 +173,7 @@ qvernote (0.3-2maemo1) unstable; urgency=low
  -- Sharky76 <burbulator@gmail.com>  Fri,  21 Jun 2010 23:05:18 +0300
 
 qvernote (0.3-1maemo1) unstable; urgency=low
-  
+
   * Implemented offline sync support
 
  -- Sharky76 <burbulator@gmail.com>  Fri,  21 Jun 2010 23:05:18 +0300
@@ -180,7 +187,7 @@ qvernote (0.2-1maemo1) unstable; urgency=low
 
 qvernote (0.1-1maemo1) unstable; urgency=low
 
-  * Initial release 
+  * Initial release
 
  -- Sharky76 <burbulator@gmail.com>  Fri,  4 Jun 2010 21:54:18 +0300
 

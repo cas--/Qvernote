@@ -11,7 +11,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libevernote1.23, thrift0.9.0, libqt
 Description: Evernote client
  Full featured client for Evernote with offline synchronization support
 XSBC-Bugtracker: https://github.com/cas--/Qvernote/issues
-XB-Maemo-Upgrade-Description: Added Evernote OAuth support
+XB-Maemo-Upgrade-Description: Fixed HTTPS along with minor bugs and UI tweaks
 XB-Maemo-Display-Name: Qvernote
 XB-Maemo-Icon-26:
  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgI

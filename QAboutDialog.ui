@@ -52,7 +52,7 @@ along with Qvernote.  If not, see http://www.gnu.org/licenses/.
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Qvernote 0.6</string>
+      <string>Qvernote 0.7</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
