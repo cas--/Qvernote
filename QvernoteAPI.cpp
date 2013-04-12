@@ -99,7 +99,7 @@ bool QvernoteAPI::initUserStore() {
 	try {
 		signal(SIGPIPE, SIG_IGN);
 		shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-		QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
+		QString pgmDir = qApp->applicationDirPath() + "/" + CA_CERT;
 		sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
 		sslSocketFactory->authenticate(true);
 		shared_ptr<TSSLSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);
@@ -144,7 +144,7 @@ bool QvernoteAPI::initNoteStore() {
 	string noteStorePath = string(EDAM_NOTE_STORE_PATH) + string("/") + getShardId();
 	try {
 		shared_ptr<TSSLSocketFactory> sslSocketFactory(new TSSLSocketFactory());
-		QString pgmDir = qApp->applicationDirPath() + "/certs/verisign_certs.pem";
+		QString pgmDir = qApp->applicationDirPath() + "/" + CA_CERT;
 		sslSocketFactory->loadTrustedCertificates(pgmDir.toStdString().c_str());
 		sslSocketFactory->authenticate(true);
 		shared_ptr<TSSLSocket> sslSocket = sslSocketFactory->createSocket(EVERNOTE_HOST, 443);

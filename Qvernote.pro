@@ -170,7 +170,9 @@ unix {
     # MAKE INSTALL
     INSTALLS += target \
         loader \
-        desktop
+        desktop \
+        cacert \
+        css
     INSTALLS += pixmap \
         icon26 \
         icon40 \
@@ -181,6 +183,10 @@ unix {
     loader.files = $${TARGET}.sh
     desktop.path = $$DATADIR/applications/hildon
     desktop.files += $${TARGET}.desktop
+    cacert.path += $$BINDIR
+    cacert.files += verisign_certs.pem
+    css.path += $$BINDIR
+    css.files += qvernote.css
     pixmap.path = $$DATADIR/pixmaps
     pixmap.files += data/48x48/$${TARGET}.png
     icon26.path = $$DATADIR/icons/hicolor/26x26/apps

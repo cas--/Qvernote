@@ -37,6 +37,7 @@ along with Qvernote.  If not, see <http://www.gnu.org/licenses/>.
 #define EDAM_USER_STORE_PATH "/edam/user"
 #define EDAM_NOTE_STORE_PATH "/edam/note"
 #define EDAM_CLIENT_NAME "Qvernote QT/4.6;Linux;Nokia N900"
+#define CA_CERT "verisign_certs.pem"
 
 class QvernoteAPI;
 
