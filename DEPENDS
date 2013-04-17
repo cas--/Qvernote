@@ -1,0 +1,14 @@
+Qvernote Build Dependencies
+---------------------------
+
+  * Maemo Scratchbox
+
+  * libqt4-dev
+  * libqt4-sql-sqlite
+  * libqtm-dev
+  * libevernote-dev (1.23)
+  * thrift-dev (0.9.0)
+  * libboost1.42-dev
+  * libssl-dev
+  * libpoppler-qt4-dev
+  * libqt4-phonon

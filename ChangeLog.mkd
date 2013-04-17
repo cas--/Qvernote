@@ -1,0 +1,192 @@
+# Qvernote 0.7 (11 April 2013)
+
+### Core
+  * Fixed SSL errors when syncing (HTTPS is now only option)
+  * Included verisign.pem to resolve cacert issues
+
+### Notebook View
+  * Moved 'All Notes' to top of notebook list
+  * Replaced 'New Notebook' with 'New Note'
+  * Moved the 'New Notebook' button to the dropdown menu
+  * New icons for notebooks
+  * Fix notebook notes count not updating
+  * Removed unnecessary notification box popups
+
+### Note Editor
+  * Moved email and map buttons to dropdown menu to declutter overlay
+  * Modified the overlay icons so they are more transparent
+  * Editing only a tag on a note does not prompt to save thus can lose tag changes
+
+### Note Viewer
+  * Add stylesheet for checkbox that increases the size and resize on zoom
+  * Disable annoying kinetic scrolling overshoot
+
+### Settings
+  * Add a setting to change the sync rate (5,15,30,1h,2h...)
+  * Disable procol selection as HTTPS is now only option
+
+------------------------
+
+# Qvernote 0.6 (05 April 2013)
+
+### Core
+  * Add support for oauth authentication
+  * New dependancy requirements of thrift 0.9.0 and libevernote 1.2.3
+
+### Note Editor
+  * Strip any trailing whitespace in note title to fix syncing issue
+
+### Settings
+  * Replace user/pass with button to authorize or revoke evernote access
+
+### Packaging
+  * Include new non-infringing qvernote icon
+
+------------------------
+
+# Qvernote 0.5.5 (22 August 2010)
+
+  * Fixed GPS position update crash
+  * Fixed non-english file names handeling
+  * Pdf preview now resizing depending on orientation
+  * Increase speed of displaying a note
+
+------------------------
+
+# Qvernote 0.5.4 (10 August 2010)
+
+  * Added "audio/x-wav" mime type support
+  * Fixed non-english note title in Tags select dialog
+  * Fixed note attributes does not created on sync
+
+------------------------
+
+# Qvernote 0.5.3 (9 August 2010)
+
+  * Added option to blacklist notebooks from synchronizing
+  * Fixed crash bug when editing a note then opening another notebook
+  * Added note limit
+
+  Mon, 9 Aug 2010 14:17
+------------------------
+
+# Qvernote 0.5.2 (9 August 2010)
+
+  * Implemented GPS positioning update
+  * Added internationalization support
+  * Added resource save/preview dialog
+  * Added preview for PDF and Audio files
+
+------------------------
+
+# Qvernote 0.5.1 (2 August 2010)
+
+  * Render thumbnails like Evernote web interface
+  * Even more speed improvements
+  * Fixed save note prompt appearing every time
+  * PDF preview support!!!
+  * Notebook search
+
+------------------------
+
+# Qvernote 0.5.0 (31 July 2010)
+
+  * Fixed "&" sign breaking note text
+  * Maps support (google maps only)
+  * Fixed multiple notes creation bug
+
+------------------------
+
+# Qvernote 0.4.7 (25 July 2010)
+
+  * Fixed crash whne deleting the note and re-opening the notebook
+  * Added favorite notes support
+  * Generate note thumbnails on sync
+  * Added DB indexes to improve note loading speed
+  * imroved thumbnail visibility - now covers more of the original note area
+
+------------------------
+
+# Qvernote 0.4.6 (21 July 2010)
+
+  * Fixed note sorting order
+
+------------------------
+
+# Qvernote 0.4.5 (20 July 2010)
+
+  * Fixed a lot of memory leaks
+  * Reduced memory usage
+  * General speed increase
+
+------------------------
+
+# Qvernote 0.4.3 (17 July 2010)
+
+  * Ability to manage note after search
+  * Fixed auto-capitalization bug in Note Editor
+  * Add error message when attempting to save note without title
+
+------------------------
+
+# Qvernote 0.4.2 (15 July 2010)
+
+  * Search by tag support
+  * Sort notes by date
+  * Fixed bug with syncing several resource types
+
+------------------------
+
+# Qvernote 0.4.1 (29 June 2010)
+
+  * Support for grid note view with thumbnails
+  * Fixed new note uploading to server
+  * Support "search-as-you-type"
+  * Fixed web clip note view
+  * Added "Settings" dialog
+  * Added move and copy of notes to another notebooks
+  * Added DB management (delete thumbnails and drop DB)
+  * Added platform contact list integration
+  * Moved database to /home/user/MyDocs partition
+  * Added nice animated navigation controls to Note View window
+  * Added notes switch animation
+
+------------------------
+
+# Qvernote 0.3.8 (28 June 2010)
+
+  * Fixed extremly long delay bug when starting note edit
+  * Rediced memory usage
+  * Make edit window child of both NoteViewWindow and NotesView
+  * Removed "note" icon from notelist item widget
+
+------------------------
+
+# Qvernote 0.3.7 (26 June 2010)
+
+  * Add notebook name in notes view
+  * Display progress of downloaded notes
+  * Add contact me button to about dialog
+  * Fixed secondary text color to be in match with maemo default color
+  * Fixed crash in delete notebook view
+  * Note web view scrolls to the beginning when paging notes
+
+------------------------
+
+# Qvernote 0.3 (21 June 2010)
+
+  * Implemented offline sync support
+  * Fix crash on big notestore
+
+------------------------
+
+# Qvernote 0.2 (14 June 2010)
+
+  * Add support for all kind of notes except crypt
+  * Add "view" note mode before edit
+
+------------------------
+
+# Qvernote 0.1 (4 June 2010)
+
+  * Initial release

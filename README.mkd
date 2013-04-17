@@ -1,0 +1,45 @@
+Qvernote
+=======
+
+A Qt based Evernote client for Maemo 5 on the Nokia N900.
+
+The original [Qvernote](https://code.google.com/p/qvernote/) was created
+by Alex R (Sharky76) which has now been abandoned.
+
+This codebase is a continuation of that work with the original purpose to add
+OAuth support but now includes bug and usability fixes, focusing solely on N900
+development.
+
+See [ChangeLog](ChangeLog.mkd) for a list of notable updates.
+
+### Bug Reporting
+
+  * https://github.com/cas--/Qvernote/issues
+
+### Source Code
+
+  * [github hosting](https://github.com/cas--/Qvernote/)
+
+### Maemo Links
+
+  * [Forum](http://talk.maemo.org/showthread.php?t=55179)
+  * [Garage](https://garage.maemo.org/projects/qvernote/)
+  * [Package](http://maemo.org/packages/view/qvernote/)
+
+
+### Build Requirements:
+
+  * *See [DEPENDS](DEPENDS)*
+
+
+### Build in Scratchbox:
+
+    qmake
+    make
+
+
+### Run in Scratchbox:
+
+    run-standalone.sh <full path to qvernote binary>
+
+
